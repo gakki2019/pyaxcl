@@ -46,10 +46,10 @@ def init() -> int:
         libaxcl_ive.AXCL_IVE_Init.argtypes = None
         ret = libaxcl_ive.AXCL_IVE_Init()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def exit() -> int:
@@ -73,10 +73,10 @@ def exit() -> int:
         libaxcl_ive.AXCL_IVE_Exit.argtypes = None
         libaxcl_ive.AXCL_IVE_Exit()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def query(handle: int, block: bool) -> tuple[int, int]:
@@ -114,10 +114,10 @@ def query(handle: int, block: bool) -> tuple[int, int]:
         c_block = AX_BOOL(1 if block else 0)
         ret = libaxcl_ive.AXCL_IVE_Query(c_handle, byref(c_finish), c_block)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return True if c_finish else False, ret
+    return True if c_finish else False, ret
 
 
 def dma(src: dict, dst: dict, ctrl: dict, instant: bool) -> tuple[int, int]:
@@ -173,10 +173,10 @@ def dma(src: dict, dst: dict, ctrl: dict, instant: bool) -> tuple[int, int]:
         if ret == 0:
             dst.update(c_dst.struct2dict())
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_handle.value, ret
+    return c_handle.value, ret
 
 
 def add(src1: dict, src2: dict, dst: dict, ctrl: dict, instant: bool) -> tuple[int, int]:
@@ -233,10 +233,10 @@ def add(src1: dict, src2: dict, dst: dict, ctrl: dict, instant: bool) -> tuple[i
         if ret == 0:
             ive_image_to_dict(c_dst, dst)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_handle.value, ret
+    return c_handle.value, ret
 
 
 def sub(src1: dict, src2: dict, dst: dict, ctrl: dict, instant: bool) -> tuple[int, int]:
@@ -293,10 +293,10 @@ def sub(src1: dict, src2: dict, dst: dict, ctrl: dict, instant: bool) -> tuple[i
         if ret == 0:
             ive_image_to_dict(c_dst, dst)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_handle.value, ret
+    return c_handle.value, ret
 
 
 def ive_and(src1: dict, src2: dict, dst: dict, instant: bool) -> tuple[int, int]:
@@ -349,10 +349,10 @@ def ive_and(src1: dict, src2: dict, dst: dict, instant: bool) -> tuple[int, int]
         if ret == 0:
             ive_image_to_dict(c_dst, dst)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_handle.value, ret
+    return c_handle.value, ret
 
 
 def ive_or(src1: dict, src2: dict, dst: dict, instant: bool) -> tuple[int, int]:
@@ -404,10 +404,10 @@ def ive_or(src1: dict, src2: dict, dst: dict, instant: bool) -> tuple[int, int]:
         if ret == 0:
             ive_image_to_dict(c_dst, dst)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_handle.value, ret
+    return c_handle.value, ret
 
 
 def xor(src1: dict, src2: dict, dst: dict, instant: bool) -> tuple[int, int]:
@@ -459,10 +459,10 @@ def xor(src1: dict, src2: dict, dst: dict, instant: bool) -> tuple[int, int]:
         if ret == 0:
             ive_image_to_dict(c_dst, dst)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_handle.value, ret
+    return c_handle.value, ret
 
 
 def mse(src1: dict, src2: dict, dst: dict, ctrl: dict, instant: bool) -> tuple[int, int]:
@@ -518,10 +518,10 @@ def mse(src1: dict, src2: dict, dst: dict, ctrl: dict, instant: bool) -> tuple[i
         if ret == 0:
             ive_image_to_dict(c_dst, dst)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_handle.value, ret
+    return c_handle.value, ret
 
 
 def canny_hys_edge(src1: dict, src2: dict, dst: dict, ctrl: dict, instant: bool) -> tuple[int, int]:
@@ -576,10 +576,10 @@ def canny_hys_edge(src1: dict, src2: dict, dst: dict, ctrl: dict, instant: bool)
         if ret == 0:
             ive_image_to_dict(c_dst, dst)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_handle.value, ret
+    return c_handle.value, ret
 
 
 def canny_edge(src: dict, dst: dict, ctrl: dict, instant: bool) -> tuple[int, int]:
@@ -630,10 +630,10 @@ def canny_edge(src: dict, dst: dict, ctrl: dict, instant: bool) -> tuple[int, in
         if ret == 0:
             ive_image_to_dict(c_dst, dst)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_handle.value, ret
+    return c_handle.value, ret
 
 
 def ccl(src: dict, dst: dict, blob: dict, ctrl: dict, instant: bool) -> tuple[int, int]:
@@ -689,10 +689,10 @@ def ccl(src: dict, dst: dict, blob: dict, ctrl: dict, instant: bool) -> tuple[in
             ive_image_to_dict(c_dst, dst)
             blob.update(c_blob.struct2dict())
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_handle.value, ret
+    return c_handle.value, ret
 
 
 def erode(src: dict, dst: dict, ctrl: dict, instant: bool) -> tuple[int, int]:
@@ -744,10 +744,10 @@ def erode(src: dict, dst: dict, ctrl: dict, instant: bool) -> tuple[int, int]:
         if ret == 0:
             ive_image_to_dict(c_dst, dst)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_handle.value, ret
+    return c_handle.value, ret
 
 
 def dilate(src: dict, dst: dict, ctrl: dict, instant: bool) -> tuple[int, int]:
@@ -799,10 +799,10 @@ def dilate(src: dict, dst: dict, ctrl: dict, instant: bool) -> tuple[int, int]:
         if ret == 0:
             ive_image_to_dict(c_dst, dst)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_handle.value, ret
+    return c_handle.value, ret
 
 
 def filter(src: dict, dst: dict, ctrl: dict, instant: bool) -> tuple[int, int]:
@@ -853,10 +853,10 @@ def filter(src: dict, dst: dict, ctrl: dict, instant: bool) -> tuple[int, int]:
         if ret == 0:
             ive_image_to_dict(c_dst, dst)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_handle.value, ret
+    return c_handle.value, ret
 
 
 def hist(src: dict, dst: dict, instant: bool) -> tuple[int, int]:
@@ -903,10 +903,10 @@ def hist(src: dict, dst: dict, instant: bool) -> tuple[int, int]:
         if ret == 0:
             dst.update(c_dst.struct2dict())
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_handle.value, ret
+    return c_handle.value, ret
 
 
 def equalize_hist(src: dict, dst: dict, ctrl: dict, instant: bool) -> tuple[int, int]:
@@ -957,10 +957,10 @@ def equalize_hist(src: dict, dst: dict, ctrl: dict, instant: bool) -> tuple[int,
         if ret == 0:
             dst.update(c_dst.struct2dict())
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_handle.value, ret
+    return c_handle.value, ret
 
 
 def integ(src: dict, dst: dict, ctrl: dict, instant: bool) -> tuple[int, int]:
@@ -1012,10 +1012,10 @@ def integ(src: dict, dst: dict, ctrl: dict, instant: bool) -> tuple[int, int]:
         if ret == 0:
             ive_image_to_dict(c_dst, dst)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_handle.value, ret
+    return c_handle.value, ret
 
 
 def mag_and_ang(src1: dict, src2: dict, dst_mag: dict, dst_ang: dict, instant: bool) -> tuple[int, int]:
@@ -1072,10 +1072,10 @@ def mag_and_ang(src1: dict, src2: dict, dst_mag: dict, dst_ang: dict, instant: b
             ive_image_to_dict(c_dst_mag, dst_mag)
             ive_image_to_dict(c_dst_ang, dst_ang)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_handle.value, ret
+    return c_handle.value, ret
 
 
 def sobel(src: dict, dst: dict, ctrl: dict, instant: bool) -> tuple[int, int]:
@@ -1126,10 +1126,10 @@ def sobel(src: dict, dst: dict, ctrl: dict, instant: bool) -> tuple[int, int]:
         if ret == 0:
             ive_image_to_dict(c_dst, dst)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_handle.value, ret
+    return c_handle.value, ret
 
 
 def gmm(src: dict, dst_fg: dict, dst_bg: dict, model: dict, ctrl: dict, instant: bool) -> tuple[int, int]:
@@ -1189,10 +1189,10 @@ def gmm(src: dict, dst_fg: dict, dst_bg: dict, model: dict, ctrl: dict, instant:
             ive_image_to_dict(c_dst_fg, dst_fg)
             ive_image_to_dict(c_dst_bg, dst_bg)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_handle.value, ret
+    return c_handle.value, ret
 
 
 def gmm2(src: dict, dst_fg: dict, dst_bg: dict, model: dict, ctrl: dict, instant: bool) -> tuple[int, int]:
@@ -1252,10 +1252,10 @@ def gmm2(src: dict, dst_fg: dict, dst_bg: dict, model: dict, ctrl: dict, instant
             ive_image_to_dict(c_dst_fg, dst_fg)
             ive_image_to_dict(c_dst_bg, dst_bg)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_handle.value, ret
+    return c_handle.value, ret
 
 
 def thresh(src: dict, dst: dict, ctrl: dict, instant: bool) -> tuple[int, int]:
@@ -1306,10 +1306,10 @@ def thresh(src: dict, dst: dict, ctrl: dict, instant: bool) -> tuple[int, int]:
         if ret == 0:
             ive_image_to_dict(c_dst, dst)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_handle.value, ret
+    return c_handle.value, ret
 
 
 def ive_16bit_to_8bit(src: dict, dst: dict, ctrl: dict, instant: bool) -> tuple[int, int]:
@@ -1360,10 +1360,10 @@ def ive_16bit_to_8bit(src: dict, dst: dict, ctrl: dict, instant: bool) -> tuple[
         if ret == 0:
             ive_image_to_dict(c_dst, dst)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_handle.value, ret
+    return c_handle.value, ret
 
 
 def crop_image(src: dict, dst_list: list[dict], box_list: list[dict], ctrl: dict, engine: int, instant: bool) -> tuple[int, int]:
@@ -1429,10 +1429,10 @@ def crop_image(src: dict, dst_list: list[dict], box_list: list[dict], ctrl: dict
             for idx, d_item in enumerate(dst_list):
                 ive_image_to_dict(c_dst_array[idx], d_item)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_handle.value, ret
+    return c_handle.value, ret
 
 
 def crop_resize(src: dict, dst_list: list[dict], box_list: list[dict], ctrl: dict, engine: int, instant: bool) -> tuple[int, int]:
@@ -1503,10 +1503,10 @@ def crop_resize(src: dict, dst_list: list[dict], box_list: list[dict], ctrl: dic
             for idx, d_item in enumerate(dst_list):
                 ive_image_to_dict(c_dst_array[idx], d_item, engine)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_handle.value, ret
+    return c_handle.value, ret
 
 
 def crop_resize_for_split_yuv(src1: dict, src2: dict, dst1_list: list[dict], dst2_list: list[dict], box_list: list[dict], ctrl: dict, engine: int, instant: bool) -> tuple[int, int]:
@@ -1585,10 +1585,10 @@ def crop_resize_for_split_yuv(src1: dict, src2: dict, dst1_list: list[dict], dst
             for idx, d_item in enumerate(dst2_list):
                 ive_image_to_dict(c_dst2_array[idx], d_item, engine)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_handle.value, ret
+    return c_handle.value, ret
 
 
 def csc(src: dict, dst: dict, engine: int, instant: bool) -> tuple[int, int]:
@@ -1638,10 +1638,10 @@ def csc(src: dict, dst: dict, engine: int, instant: bool) -> tuple[int, int]:
         if ret == 0:
             ive_image_to_dict(c_dst, dst, engine)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_handle.value, ret
+    return c_handle.value, ret
 
 
 def crop_resize2(src: dict, dst_list: list[dict], src_box_list: list[dict], dst_box_list: list[dict], ctrl: dict, engine: int, instant: bool) -> tuple[int, int]:
@@ -1716,10 +1716,10 @@ def crop_resize2(src: dict, dst_list: list[dict], src_box_list: list[dict], dst_
             for idx, d_item in enumerate(dst_list):
                 ive_image_to_dict(c_dst_array[idx], d_item, engine)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_handle.value, ret
+    return c_handle.value, ret
 
 
 def crop_resize2_for_split_yuv(src1: dict, src2: dict, dst1_list: list[dict], dst2_list: list[dict], src_box_list: list[dict], dst_box_list: list[dict], ctrl: dict, engine: int, instant: bool) -> tuple[int, int]:
@@ -1806,10 +1806,10 @@ def crop_resize2_for_split_yuv(src1: dict, src2: dict, dst1_list: list[dict], ds
             for idx, d_item in enumerate(dst2_list):
                 ive_image_to_dict(c_dst2_array[idx], d_item, engine)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_handle.value, ret
+    return c_handle.value, ret
 
 
 def mau_matmul(src: dict, dst: dict, ctrl: dict, engine: int, instant: bool) -> tuple[int, int]:
@@ -1861,10 +1861,10 @@ def mau_matmul(src: dict, dst: dict, ctrl: dict, engine: int, instant: bool) -> 
         if ret == 0:
             dst.update(c_dst.struct2dict())
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_handle.value, ret
+    return c_handle.value, ret
 
 
 def npu_create_matmul_handle(ctrl: dict) -> tuple[int, int]:
@@ -1887,8 +1887,8 @@ def npu_create_matmul_handle(ctrl: dict) -> tuple[int, int]:
         - **ret** (*int*) - 0 indicates success, otherwise failure.
     """
     ret = -1
+    c_handle = AX_IVE_MATMUL_HANDLE(-1)
     try:
-        c_handle = AX_IVE_MATMUL_HANDLE(-1)
         c_ctrl = AX_IVE_NPU_MATMUL_CTRL_T()
         libaxcl_ive.AXCL_IVE_NPU_CreateMatMulHandle.restype = AX_S32
         libaxcl_ive.AXCL_IVE_NPU_CreateMatMulHandle.argtypes = [
@@ -1899,10 +1899,10 @@ def npu_create_matmul_handle(ctrl: dict) -> tuple[int, int]:
 
         ret = libaxcl_ive.AXCL_IVE_NPU_CreateMatMulHandle(byref(c_handle), byref(c_ctrl))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_handle.value, ret
+    return c_handle.value, ret
 
 
 def npu_destroy_matmul_handle(handle: int) -> int:
@@ -1932,10 +1932,10 @@ def npu_destroy_matmul_handle(handle: int) -> int:
         c_handle = POINTER(AX_IVE_MATMUL_HANDLE)(handle)
         ret = libaxcl_ive.AXCL_IVE_NPU_DestroyMatMulHandle(c_handle)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def npu_matmul(handle: int, src: dict, dst: dict, engine: int, instant: bool) -> int:
@@ -1983,7 +1983,7 @@ def npu_matmul(handle: int, src: dict, dst: dict, engine: int, instant: bool) ->
 
         dst.update(c_dst.struct2dict())
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret

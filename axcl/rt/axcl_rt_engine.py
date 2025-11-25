@@ -48,10 +48,10 @@ def engine_init(npu_kind: int) -> int:
 
         ret = libaxcl_rt.axclrtEngineInit(c_npu_kind)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def engine_get_vnpu_kind()-> tuple[int, int]:
@@ -73,17 +73,17 @@ def engine_get_vnpu_kind()-> tuple[int, int]:
         - **ret** (*int*) - 0 indicates success, otherwise failure
     """
     ret = -1
+    c_npu_kind = c_int32(0)
     try:
         libaxcl_rt.axclrtEngineGetVNpuKind.restype = axclError
         libaxcl_rt.axclrtEngineGetVNpuKind.argtypes=[POINTER(c_int32)]
-        c_npu_kind = c_int32(0)
 
         ret = libaxcl_rt.axclrtEngineGetVNpuKind(byref(c_npu_kind))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_npu_kind.value, ret
+    return c_npu_kind.value, ret
 
 
 def engine_finalize() -> int:
@@ -107,10 +107,10 @@ def engine_finalize() -> int:
 
         ret = libaxcl_rt.axclrtEngineFinalize()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def engine_load_from_file(model_path: str) -> tuple[int, int]:
@@ -141,10 +141,10 @@ def engine_load_from_file(model_path: str) -> tuple[int, int]:
             c_mode_path = c_char_p(model_path.encode('utf-8'))
             ret = libaxcl_rt.axclrtEngineLoadFromFile(c_mode_path, byref(c_model_id))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_model_id.value, ret
+    return c_model_id.value, ret
 
 
 def engine_load_from_mem(model: int, model_size: int) -> tuple[int, int]:
@@ -177,10 +177,10 @@ def engine_load_from_mem(model: int, model_size: int) -> tuple[int, int]:
             c_model = c_void_p(model)
             ret = libaxcl_rt.axclrtEngineLoadFromMem(c_model, c_model_size, byref(c_model_id))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_model_id.value, ret
+    return c_model_id.value, ret
 
 
 def engine_unload(model_id: int) -> int:
@@ -206,10 +206,10 @@ def engine_unload(model_id: int) -> int:
         c_model_id = c_uint64(model_id)
         ret = libaxcl_rt.axclrtEngineUnload(c_model_id)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def engine_get_model_compiler_version(model_id: int) -> str:
@@ -228,7 +228,7 @@ def engine_get_model_compiler_version(model_id: int) -> str:
     :param int model_id: model id
     :returns: **version** (*str*) - model compiler version
     """
-    version = None
+    version = ""
     try:
         libaxcl_rt.axclrtEngineGetModelCompilerVersion.restype = c_char_p
         libaxcl_rt.axclrtEngineGetModelCompilerVersion.argtypes=[c_uint64]
@@ -237,10 +237,10 @@ def engine_get_model_compiler_version(model_id: int) -> str:
         if c_version:
             version = c_version.decode('utf-8')
     except:
+        version = ""
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return version
+    return version
 
 
 def engine_set_affinity(model_id: int, mask: int) -> int:
@@ -268,10 +268,10 @@ def engine_set_affinity(model_id: int, mask: int) -> int:
         c_set = c_uint32(mask)
         ret = libaxcl_rt.axclrtEngineSetAffinity(c_model_id, c_set)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def engine_get_affinity(model_id: int) -> tuple[int, int]:
@@ -302,10 +302,10 @@ def engine_get_affinity(model_id: int) -> tuple[int, int]:
 
         ret = libaxcl_rt.axclrtEngineGetAffinity(c_model_id, byref(c_set))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_set.value, ret
+    return c_set.value, ret
 
 
 def engine_get_usage(model_path: str) -> tuple[int, int, int]:
@@ -338,10 +338,10 @@ def engine_get_usage(model_path: str) -> tuple[int, int, int]:
             c_model_path = c_char_p(model_path.encode('utf-8'))
             ret = libaxcl_rt.axclrtEngineGetUsage(c_model_path, byref(c_sys_size), byref(c_cmm_size))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_sys_size.value, c_cmm_size.value, ret
+    return c_sys_size.value, c_cmm_size.value, ret
 
 
 def engine_get_usage_from_mem(model: int, model_size: int) -> tuple[int, int, int]:
@@ -375,10 +375,10 @@ def engine_get_usage_from_mem(model: int, model_size: int) -> tuple[int, int, in
         if model and model_size > 0:
             ret = libaxcl_rt.axclrtEngineGetUsageFromMem(model, c_model_size, byref(c_sys_size), byref(c_cmm_size))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_sys_size.value, c_cmm_size.value, ret
+    return c_sys_size.value, c_cmm_size.value, ret
 
 
 def engine_get_usage_from_mode_id(model_id: int) -> tuple[int, int, int]:
@@ -410,10 +410,10 @@ def engine_get_usage_from_mode_id(model_id: int) -> tuple[int, int, int]:
         c_model_id = c_uint64(model_id)
         ret = libaxcl_rt.axclrtEngineGetUsageFromModelId(c_model_id, byref(c_sys_size), byref(c_cmm_size))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_sys_size.value, c_cmm_size.value, ret
+    return c_sys_size.value, c_cmm_size.value, ret
 
 
 def engine_get_model_type(model_path: str) -> tuple[int, int]:
@@ -444,10 +444,10 @@ def engine_get_model_type(model_path: str) -> tuple[int, int]:
             c_model_path = c_char_p(model_path.encode('utf-8'))
             ret = libaxcl_rt.axclrtEngineGetModelType(c_model_path, byref(c_mode_type))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_mode_type.value, ret
+    return c_mode_type.value, ret
 
 
 def engine_get_model_type_from_mem(model: int, model_size: int) -> tuple[int, int]:
@@ -479,10 +479,10 @@ def engine_get_model_type_from_mem(model: int, model_size: int) -> tuple[int, in
         if model and model_size > 0:
             ret = libaxcl_rt.axclrtEngineGetModelTypeFromMem(model, c_model_size, byref(c_mode_type))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_mode_type.value, ret
+    return c_mode_type.value, ret
 
 
 def engine_get_model_type_from_model_id(model_id: int) -> tuple[int, int]:
@@ -512,10 +512,10 @@ def engine_get_model_type_from_model_id(model_id: int) -> tuple[int, int]:
         c_model_id = c_uint64(model_id)
         ret = libaxcl_rt.axclrtEngineGetModelTypeFromModelId(c_model_id, byref(c_mode_type))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_mode_type.value, ret
+    return c_mode_type.value, ret
 
 
 def engine_get_io_info(model_id: int) -> tuple[int, int]:
@@ -545,10 +545,10 @@ def engine_get_io_info(model_id: int) -> tuple[int, int]:
         c_model_id = c_uint64(model_id)
         ret = libaxcl_rt.axclrtEngineGetIOInfo(c_model_id, byref(io_info))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return io_info.value, ret
+    return io_info.value, ret
 
 
 def engine_destroy_io_info(io_info: int) -> int:
@@ -575,10 +575,10 @@ def engine_destroy_io_info(io_info: int) -> int:
             c_io_info = c_void_p(io_info)
             ret = libaxcl_rt.axclrtEngineDestroyIOInfo(c_io_info)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def engine_get_shape_groups_count(io_info: int) -> tuple[int, int]:
@@ -609,10 +609,10 @@ def engine_get_shape_groups_count(io_info: int) -> tuple[int, int]:
             c_io_info = c_void_p(io_info)
             ret = libaxcl_rt.axclrtEngineGetShapeGroupsCount(c_io_info, byref(c_count))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_count.value, ret
+    return c_count.value, ret
 
 
 def engine_get_num_inputs(io_info: int) -> int:
@@ -639,10 +639,10 @@ def engine_get_num_inputs(io_info: int) -> int:
             c_io_info = c_void_p(io_info)
             num_inputs = libaxcl_rt.axclrtEngineGetNumInputs(c_io_info)
     except:
+        num_inputs = 0
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return num_inputs
+    return num_inputs
 
 
 def engine_get_num_outputs(io_info: int) -> int:
@@ -669,10 +669,10 @@ def engine_get_num_outputs(io_info: int) -> int:
             c_io_info = c_void_p(io_info)
             num_outputs = libaxcl_rt.axclrtEngineGetNumOutputs(c_io_info)
     except:
+        num_outputs = 0
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return num_outputs
+    return num_outputs
 
 
 def engine_get_input_size_by_index(io_info: int, group: int, index: int) -> int:
@@ -701,10 +701,10 @@ def engine_get_input_size_by_index(io_info: int, group: int, index: int) -> int:
             c_io_info = c_void_p(io_info)
             size = libaxcl_rt.axclrtEngineGetInputSizeByIndex(c_io_info, c_uint32(group), c_uint32(index))
     except:
+        size = 0
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return size
+    return size
 
 
 def engine_get_output_size_by_index(io_info: int, group: int, index: int) -> int:
@@ -733,10 +733,10 @@ def engine_get_output_size_by_index(io_info: int, group: int, index: int) -> int
             c_io_info = c_void_p(io_info)
             size = libaxcl_rt.axclrtEngineGetOutputSizeByIndex(c_io_info, c_uint32(group), c_uint32(index))
     except:
+        size = 0
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return size
+    return size
 
 
 def engine_get_input_name_by_index(io_info: int, index: int) -> str:
@@ -766,10 +766,10 @@ def engine_get_input_name_by_index(io_info: int, index: int) -> str:
             if c_name:
                 name = c_name.decode('utf-8')
     except:
+        name = None
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return name
+    return name
 
 
 def engine_get_output_name_by_index(io_info: int, index: int) -> str:
@@ -799,10 +799,10 @@ def engine_get_output_name_by_index(io_info: int, index: int) -> str:
             if c_name:
                 name = c_name.decode('utf-8')
     except:
+        name = None
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return name
+    return name
 
 
 def engine_get_input_index_by_name(io_info: int, name: str) -> int:
@@ -831,10 +831,10 @@ def engine_get_input_index_by_name(io_info: int, name: str) -> int:
             c_name = c_char_p(name.encode('utf-8'))
             index = libaxcl_rt.axclrtEngineGetInputIndexByName(c_io_info, c_name)
     except:
+        index = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return index
+    return index
 
 
 def engine_get_output_index_by_name(io_info: int, name: str) -> int:
@@ -863,10 +863,10 @@ def engine_get_output_index_by_name(io_info: int, name: str) -> int:
             c_name = c_char_p(name.encode('utf-8'))
             index = libaxcl_rt.axclrtEngineGetOutputIndexByName(c_io_info, c_name)
     except:
+        index = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return index
+    return index
 
 
 def engine_get_input_dims(io_info: int, group: int, index: int) -> tuple[list, int]:
@@ -906,10 +906,10 @@ def engine_get_input_dims(io_info: int, group: int, index: int) -> tuple[list, i
                 for i in range(c_dims.dimCount):
                     dims.append(c_dims.dims[i])
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return dims, ret
+    return dims, ret
 
 
 def engine_get_output_dims(io_info: int, group: int, index: int) -> tuple[list, int]:
@@ -949,10 +949,10 @@ def engine_get_output_dims(io_info: int, group: int, index: int) -> tuple[list, 
                 for i in range(c_dims.dimCount):
                     dims.append(c_dims.dims[i])
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return dims, ret
+    return dims, ret
 
 
 def engine_get_input_data_type(io_info: int, index: int) -> tuple[int, int]:
@@ -985,10 +985,10 @@ def engine_get_input_data_type(io_info: int, index: int) -> tuple[int, int]:
             c_io_info = c_void_p(io_info)
             ret = libaxcl_rt.axclrtEngineGetInputDataType(c_io_info, c_index, byref(c_type))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_type.value, ret
+    return c_type.value, ret
 
 
 def engine_get_output_data_type(io_info: int, index: int) -> tuple[int, int]:
@@ -1021,10 +1021,10 @@ def engine_get_output_data_type(io_info: int, index: int) -> tuple[int, int]:
             c_io_info = c_void_p(io_info)
             ret = libaxcl_rt.axclrtEngineGetOutputDataType(c_io_info, c_index, byref(c_type))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_type.value, ret
+    return c_type.value, ret
 
 
 def engine_get_input_data_layout(io_info: int, index: int) -> tuple[int, int]:
@@ -1057,10 +1057,10 @@ def engine_get_input_data_layout(io_info: int, index: int) -> tuple[int, int]:
             c_io_info = c_void_p(io_info)
             ret = libaxcl_rt.axclrtEngineGetInputDataLayout(c_io_info, c_index, byref(c_layout))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_layout.value, ret
+    return c_layout.value, ret
 
 
 def engine_get_output_data_layout(io_info: int, index: int) -> tuple[int, int]:
@@ -1093,10 +1093,10 @@ def engine_get_output_data_layout(io_info: int, index: int) -> tuple[int, int]:
             c_io_info = c_void_p(io_info)
             ret = libaxcl_rt.axclrtEngineGetOutputDataLayout(c_io_info, c_index, byref(c_layout))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_layout.value, ret
+    return c_layout.value, ret
 
 
 def engine_create_io(io_info: int) -> tuple[int, int]:
@@ -1128,10 +1128,10 @@ def engine_create_io(io_info: int) -> tuple[int, int]:
             c_io_info = c_void_p(io_info)
             ret = libaxcl_rt.axclrtEngineCreateIO(c_io_info, byref(io))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return io.value, ret
+    return io.value, ret
 
 
 def engine_destroy_io(io: int) -> int:
@@ -1151,7 +1151,6 @@ def engine_destroy_io(io: int) -> int:
     :returns: **ret** (*int*) - 0 indicates success, otherwise failure
     """
     ret = -1
-
     try:
         libaxcl_rt.axclrtEngineDestroyIO.restype = axclError
         libaxcl_rt.axclrtEngineDestroyIO.argtypes=[c_void_p]
@@ -1159,10 +1158,10 @@ def engine_destroy_io(io: int) -> int:
             c_io = c_void_p(io)
             ret = libaxcl_rt.axclrtEngineDestroyIO(c_io)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def engine_set_input_buffer_by_index(io: int, index: int, data_buffer: int, size: int) -> int:
@@ -1185,7 +1184,6 @@ def engine_set_input_buffer_by_index(io: int, index: int, data_buffer: int, size
     :returns: **ret** (*int*) - 0 indicates success, otherwise failure
     """
     ret = -1
-
     try:
         libaxcl_rt.axclrtEngineSetInputBufferByIndex.restype = axclError
         libaxcl_rt.axclrtEngineSetInputBufferByIndex.argtypes=[c_void_p, c_uint32, c_void_p, c_uint64]
@@ -1195,10 +1193,10 @@ def engine_set_input_buffer_by_index(io: int, index: int, data_buffer: int, size
             c_io = c_void_p(io)
             ret = libaxcl_rt.axclrtEngineSetInputBufferByIndex(c_io, c_index, data_buffer, c_size)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def engine_set_output_buffer_by_index(io: int, index: int, data_buffer: int, size: int) -> int:
@@ -1221,7 +1219,6 @@ def engine_set_output_buffer_by_index(io: int, index: int, data_buffer: int, siz
     :returns: **ret** (*int*) - 0 indicates success, otherwise failure
     """
     ret = -1
-
     try:
         libaxcl_rt.axclrtEngineSetOutputBufferByIndex.restype = axclError
         libaxcl_rt.axclrtEngineSetOutputBufferByIndex.argtypes=[c_void_p, c_uint32, c_void_p, c_uint64]
@@ -1231,10 +1228,10 @@ def engine_set_output_buffer_by_index(io: int, index: int, data_buffer: int, siz
             c_io = c_void_p(io)
             ret = libaxcl_rt.axclrtEngineSetOutputBufferByIndex(c_io, c_index, data_buffer, c_size)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def engine_set_input_buffer_by_name(io: int, name: str, data_buffer: int, size: int) -> int:
@@ -1257,7 +1254,6 @@ def engine_set_input_buffer_by_name(io: int, name: str, data_buffer: int, size: 
     :returns: **ret** (*int*) - 0 indicates success, otherwise failure
     """
     ret = -1
-
     try:
         libaxcl_rt.axclrtEngineSetInputBufferByName.restype = axclError
         libaxcl_rt.axclrtEngineSetInputBufferByName.argtypes=[c_void_p, c_char_p, c_void_p, c_uint64]
@@ -1267,10 +1263,10 @@ def engine_set_input_buffer_by_name(io: int, name: str, data_buffer: int, size: 
             c_name = c_char_p(name.encode('utf-8'))
             ret = libaxcl_rt.axclrtEngineSetInputBufferByName(c_io, c_name, data_buffer, c_size)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def engine_set_output_buffer_by_name(io: int, name: str, data_buffer: int, size: int) -> int:
@@ -1293,7 +1289,6 @@ def engine_set_output_buffer_by_name(io: int, name: str, data_buffer: int, size:
     :returns: **ret** (*int*) - 0 indicates success, otherwise failure
     """
     ret = -1
-
     try:
         libaxcl_rt.axclrtEngineSetOutputBufferByName.restype = axclError
         libaxcl_rt.axclrtEngineSetOutputBufferByName.argtypes=[c_void_p, c_char_p, c_void_p, c_uint64]
@@ -1303,10 +1298,10 @@ def engine_set_output_buffer_by_name(io: int, name: str, data_buffer: int, size:
             c_name = c_char_p(name.encode('utf-8'))
             ret = libaxcl_rt.axclrtEngineSetOutputBufferByName(c_io, c_name, data_buffer, c_size)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def engine_get_input_buffer_by_index(io: int, index: int) -> tuple[int, int, int]:
@@ -1341,10 +1336,10 @@ def engine_get_input_buffer_by_index(io: int, index: int) -> tuple[int, int, int
             c_io = c_void_p(io)
             ret = libaxcl_rt.axclrtEngineGetInputBufferByIndex(c_io, c_index, byref(data_buffer), byref(size))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return data_buffer.value, size.value, ret
+    return data_buffer.value, size.value, ret
 
 
 def engine_get_output_buffer_by_index(io: int, index: int) -> tuple[int, int, int]:
@@ -1379,10 +1374,10 @@ def engine_get_output_buffer_by_index(io: int, index: int) -> tuple[int, int, in
             c_io = c_void_p(io)
             ret = libaxcl_rt.axclrtEngineGetOutputBufferByIndex(c_io, c_index, byref(data_buffer), byref(size))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return data_buffer.value, size.value, ret
+    return data_buffer.value, size.value, ret
 
 
 def engine_get_input_buffer_by_name(io: int, name: str) -> tuple[int, int, int]:
@@ -1417,10 +1412,10 @@ def engine_get_input_buffer_by_name(io: int, name: str) -> tuple[int, int, int]:
             c_name = c_char_p(name.encode('utf-8'))
             ret = libaxcl_rt.axclrtEngineGetInputBufferByName(c_io, c_name, byref(data_buffer), byref(size))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return data_buffer.value, size.value, ret
+    return data_buffer.value, size.value, ret
 
 
 def engine_get_output_buffer_by_name(io: int, name: str) -> tuple[int, int, int]:
@@ -1455,10 +1450,10 @@ def engine_get_output_buffer_by_name(io: int, name: str) -> tuple[int, int, int]
             c_name = c_char_p(name.encode('utf-8'))
             ret = libaxcl_rt.axclrtEngineGetOutputBufferByName(c_io, c_name, byref(data_buffer), byref(size))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return data_buffer.value, size.value, ret
+    return data_buffer.value, size.value, ret
 
 
 def engine_set_dynamic_batch_size(io: int, batch_size: int) -> int:
@@ -1487,10 +1482,10 @@ def engine_set_dynamic_batch_size(io: int, batch_size: int) -> int:
             c_io = c_void_p(io)
             ret = libaxcl_rt.axclrtEngineSetDynamicBatchSize(c_io, c_batch_size)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def engine_create_context(model_id: int) -> tuple[int, int]:
@@ -1520,10 +1515,10 @@ def engine_create_context(model_id: int) -> tuple[int, int]:
         c_model_id = c_uint64(model_id)
         ret = libaxcl_rt.axclrtEngineCreateContext(c_model_id, byref(context_id))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return context_id.value, ret
+    return context_id.value, ret
 
 
 def engine_execute(model_id: int, context_id: int, group: int, io: int) -> int:
@@ -1547,7 +1542,6 @@ def engine_execute(model_id: int, context_id: int, group: int, io: int) -> int:
     """
 
     ret = -1
-
     try:
         libaxcl_rt.axclrtEngineExecute.restype = axclError
         libaxcl_rt.axclrtEngineExecute.argtypes=[c_uint64, c_uint64, c_uint32, c_void_p]
@@ -1558,10 +1552,10 @@ def engine_execute(model_id: int, context_id: int, group: int, io: int) -> int:
             c_io = c_void_p(io)
             ret = libaxcl_rt.axclrtEngineExecute(c_model_id, c_context_id, c_group, c_io)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def engine_execute_async(model_id: int, context_id: int, group: int, io: int, stream: int) -> int:
@@ -1585,7 +1579,6 @@ def engine_execute_async(model_id: int, context_id: int, group: int, io: int, st
     :returns: **ret** (*int*) - 0 indicates success, otherwise failure
     """
     ret = -1
-
     try:
         libaxcl_rt.axclrtEngineExecuteAsync.restype = axclError
         libaxcl_rt.axclrtEngineExecuteAsync.argtypes=[c_uint64, c_uint64, c_uint32, c_void_p, c_void_p]
@@ -1597,7 +1590,7 @@ def engine_execute_async(model_id: int, context_id: int, group: int, io: int, st
             c_stream = c_void_p(stream)
             ret = libaxcl_rt.axclrtEngineExecuteAsync(c_model_id, c_context_id, c_group, c_io, c_stream)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret

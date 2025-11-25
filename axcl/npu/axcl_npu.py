@@ -96,10 +96,10 @@ def init(npu_attr: dict) -> int:
         libaxcl_npu.AXCL_ENGINE_Init.argtypes = [POINTER(AX_ENGINE_NPU_ATTR_T)]
         ret = libaxcl_npu.AXCL_ENGINE_Init(byref(c_npu_attr))
     except:
+        ret = -1
         print(sys.exc_info())
         print(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def get_npu_attr() -> tuple[dict, int]:
@@ -129,10 +129,10 @@ def get_npu_attr() -> tuple[dict, int]:
         if ret == AX_SUCCESS:
             npu_attr = c_npu_attr.struct2dict()
     except:
+        ret = -1
         print(sys.exc_info())
         print(traceback.format_exc())
-    finally:
-        return npu_attr, ret
+    return npu_attr, ret
 
 
 def deinit() -> int:
@@ -156,10 +156,10 @@ def deinit() -> int:
         libaxcl_npu.AXCL_ENGINE_Deinit.argtypes = None
         ret = libaxcl_npu.AXCL_ENGINE_Deinit()
     except:
+        ret = -1
         print(sys.exc_info())
         print(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def get_model_type(ptr: int, size: int) -> tuple[int, int]:
@@ -199,10 +199,10 @@ def get_model_type(ptr: int, size: int) -> tuple[int, int]:
         if ret == AX_SUCCESS:
             model_type = c_model_type.value
     except:
+        ret = -1
         print(sys.exc_info())
         print(traceback.format_exc())
-    finally:
-        return model_type, ret
+    return model_type, ret
 
 
 def create_handle(ptr: int, size: int) -> tuple[int, int]:
@@ -242,10 +242,10 @@ def create_handle(ptr: int, size: int) -> tuple[int, int]:
         if ret == AX_SUCCESS:
             handle = c_handle.value
     except:
+        ret = -1
         print(sys.exc_info())
         print(traceback.format_exc())
-    finally:
-        return handle, ret
+    return handle, ret
 
 
 def create_handle_v2(ptr: int, size: int, extra: dict) -> tuple[int, int]:
@@ -289,10 +289,10 @@ def create_handle_v2(ptr: int, size: int, extra: dict) -> tuple[int, int]:
         if ret == AX_SUCCESS:
             handle = c_handle.value
     except:
+        ret = -1
         print(sys.exc_info())
         print(traceback.format_exc())
-    finally:
-        return handle, ret
+    return handle, ret
 
 
 def destroy_handle(handle: int) -> int:
@@ -319,10 +319,10 @@ def destroy_handle(handle: int) -> int:
         libaxcl_npu.AXCL_ENGINE_DestroyHandle.argtypes = [AX_ENGINE_HANDLE]
         ret = libaxcl_npu.AXCL_ENGINE_DestroyHandle(c_handle)
     except:
+        ret = -1
         print(sys.exc_info())
         print(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def get_handle_model_type(handle: int) -> tuple[int, int]:
@@ -358,10 +358,10 @@ def get_handle_model_type(handle: int) -> tuple[int, int]:
         if ret == AX_SUCCESS:
             model_type = c_model_type.value
     except:
+        ret = -1
         print(sys.exc_info())
         print(traceback.format_exc())
-    finally:
-        return model_type, ret
+    return model_type, ret
 
 
 def _info2dict(c_io_info: AX_ENGINE_IO_INFO_T) -> dict:
@@ -414,10 +414,10 @@ def get_io_info(handle: int) -> tuple[dict, int]:
             io_info = _info2dict(c_io_info_ptr.contents)
 
     except:
+        ret = -1
         print(sys.exc_info())
         print(traceback.format_exc())
-    finally:
-        return io_info, ret
+    return io_info, ret
 
 
 def get_group_io_info_count(handle: int) -> tuple[int, int]:
@@ -453,10 +453,10 @@ def get_group_io_info_count(handle: int) -> tuple[int, int]:
         if ret == AX_SUCCESS:
             count = c_count.value
     except:
+        ret = -1
         print(sys.exc_info())
         print(traceback.format_exc())
-    finally:
-        return count, ret
+    return count, ret
 
 
 def get_group_io_info(handle: int, index: int) -> tuple[dict, int]:
@@ -497,10 +497,10 @@ def get_group_io_info(handle: int, index: int) -> tuple[dict, int]:
             io_info = _info2dict(c_io_info_ptr.contents)
 
     except:
+        ret = -1
         print(sys.exc_info())
         print(traceback.format_exc())
-    finally:
-        return io_info, ret
+    return io_info, ret
 
 
 def create_context(handle: int) -> int:
@@ -527,10 +527,10 @@ def create_context(handle: int) -> int:
         libaxcl_npu.AXCL_ENGINE_CreateContext.argtypes = [AX_ENGINE_HANDLE]
         ret = libaxcl_npu.AXCL_ENGINE_CreateContext(c_handle)
     except:
+        ret = -1
         print(sys.exc_info())
         print(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def create_context_v2(handle: int) -> tuple[int, int]:
@@ -564,10 +564,10 @@ def create_context_v2(handle: int) -> tuple[int, int]:
         if ret == AX_SUCCESS:
             ctx = c_ctx.value
     except:
+        ret = -1
         print(sys.exc_info())
         print(traceback.format_exc())
-    finally:
-        return ctx, ret
+    return ctx, ret
 
 
 def _meta_array_dict2struct(meta: list[dict]) -> Array[AX_ENGINE_IO_BUFFER_T]:
@@ -619,10 +619,10 @@ def run_sync(handle: int, io: dict) -> int:
         ]
         ret = libaxcl_npu.AXCL_ENGINE_RunSync(c_handle, byref(c_io))
     except:
+        ret = -1
         print(sys.exc_info())
         print(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def run_sync_v2(handle: int, context: int, io: dict) -> int:
@@ -657,10 +657,10 @@ def run_sync_v2(handle: int, context: int, io: dict) -> int:
         ]
         ret = libaxcl_npu.AXCL_ENGINE_RunSyncV2(c_handle, c_context, byref(c_io))
     except:
+        ret = -1
         print(sys.exc_info())
         print(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def run_group_io_sync(handle: int, context: int, index: int, io: dict) -> int:
@@ -700,10 +700,10 @@ def run_group_io_sync(handle: int, context: int, index: int, io: dict) -> int:
             c_handle, c_context, c_uint32(index), byref(c_io)
         )
     except:
+        ret = -1
         print(sys.exc_info())
         print(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def get_affinity(handle: int) -> tuple[int, int]:
@@ -738,10 +738,10 @@ def get_affinity(handle: int) -> tuple[int, int]:
         if ret == AX_SUCCESS:
             affinity = c_affinity.value
     except:
+        ret = -1
         print(sys.exc_info())
         print(traceback.format_exc())
-    finally:
-        return affinity, ret
+    return affinity, ret
 
 
 def set_affinity(handle: int, npu_set: int) -> int:
@@ -774,10 +774,10 @@ def set_affinity(handle: int, npu_set: int) -> int:
             c_handle, AX_ENGINE_NPU_SET_T(npu_set)
         )
     except:
+        ret = -1
         print(sys.exc_info())
         print(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def get_cmm_usage(handle: int) -> tuple[dict, int]:
@@ -812,10 +812,10 @@ def get_cmm_usage(handle: int) -> tuple[dict, int]:
         if ret == AX_SUCCESS:
             cmm_info = c_cmm_info.struct2dict()
     except:
+        ret = -1
         print(sys.exc_info())
         print(traceback.format_exc())
-    finally:
-        return cmm_info, ret
+    return cmm_info, ret
 
 
 def get_model_tools_version(handle: int) -> str:

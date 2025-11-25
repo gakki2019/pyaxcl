@@ -50,10 +50,10 @@ def create_stream() -> tuple[int, int]:
 
         ret = libaxcl_rt.axclrtCreateStream(byref(stream))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return stream.value, ret
+    return stream.value, ret
 
 
 def destroy_stream(stream: int) -> int:
@@ -81,10 +81,10 @@ def destroy_stream(stream: int) -> int:
             c_stream = c_void_p(stream)
             ret = libaxcl_rt.axclrtDestroyStream(c_stream)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def destroy_stream_force(stream: int) -> int:
@@ -112,10 +112,10 @@ def destroy_stream_force(stream: int) -> int:
             c_stream = c_void_p(stream)
             ret = libaxcl_rt.axclrtDestroyStreamForce(c_stream)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def synchronize_stream(stream: int) -> int:
@@ -142,10 +142,10 @@ def synchronize_stream(stream: int) -> int:
             c_stream = c_void_p(stream)
             ret = libaxcl_rt.axclrtSynchronizeStream(c_stream)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def synchronize_stream_with_timeout(stream: int, timeout: int) -> int:
@@ -175,7 +175,7 @@ def synchronize_stream_with_timeout(stream: int, timeout: int) -> int:
             c_stream = c_void_p(stream)
             ret = libaxcl_rt.axclrtSynchronizeStreamWithTimeout(c_stream, c_timeout)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret

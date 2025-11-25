@@ -12,7 +12,7 @@
 
 支持芯片：
 
-- AX650N
+- AX650N、AX8850
 
 支持功能：
 
@@ -28,8 +28,72 @@ Python >= 3.9 64bit
 
 
 
-
 ## 环境搭建
+
+### Windows
+
+1.  安装AXCL Windows SDK（例如：axcl_win64_setup_V3.10.2_20251111020143_NO5046.exe）
+
+   > 安装参考文档： https://axcl-docs.readthedocs.io/zh-cn/latest/doc_guide_win_setup.html
+   >
+   > AXCL Windows SDK V3.10.2 获取地址：[huggingface](https://huggingface.co/AXERA-TECH/AXCL/tree/main/v3.10.2)
+
+2.  git clone git@github.com:AXERA-TECH/pyaxcl.git 将pyaxcl下载到安装目录，**目录结构如下**：
+
+   ```cmd
+    axcl
+        |-- 3rdparty
+        |-- build
+        |-- ...
+        |-- out
+        |-- pyaxcl
+               |-- axcl
+               |-- sample
+               |-- test
+               |-- build_win64.bat
+               |-- setup.py
+               |-- version.make
+   ```
+
+3. 编译wheel包，生成whl安装文件路径：***axcl\out\python\pyaxcl-3.10.2-py3-none-any.whl***
+
+   ```cmd
+   cd pyaxcl
+   ./build_win64.bat
+   
+   # 编译输出
+   running bdist_wheel
+   running build
+   running build_py
+   creating build\lib\axcl
+   copying axcl\axcl.py -> build\lib\axcl
+   ...
+   adding 'pyaxcl-3.10.2.dist-info/licenses/LICENSE'
+   adding 'pyaxcl-3.10.2.dist-info/METADATA'
+   adding 'pyaxcl-3.10.2.dist-info/WHEEL'
+   adding 'pyaxcl-3.10.2.dist-info/top_level.txt'
+   adding 'pyaxcl-3.10.2.dist-info/RECORD'
+   removing build\bdist.win-amd64\wheel
+   ```
+
+4.  添加或修改Windows系统环境变量： **AXCL_LIB_PATH**：安装目录的axcl_win_x64/bin的绝对路径。例如：
+    
+5. pip install 安装 pyaxcl
+
+   ```python
+   pip install pyaxcl-3.10.2-py3-none-any.whl
+   
+   # 验证
+   Python 3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)] on win32
+   Type "help", "copyright", "credits" or "license" for more information.
+   >>> import axcl
+   >>> exit()
+   ```
+
+   
+
+### Linux
+
 1.  正确[安装AXCL驱动(deb, rpm)](https://axcl-docs.readthedocs.io/zh-cn/latest/doc_guide_setup.html)，执行**axcl-smi**确认设备连接正常。
 
 2.  编译wheel包并安装

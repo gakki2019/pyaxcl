@@ -25,7 +25,6 @@ if exist "pyAXCL.egg-info" (
     rmdir /s /q "pyAXCL.egg-info"
 )
 
-REM 确保 wheel 包已安装
 python -m pip install --upgrade pip wheel setuptools
 
 python setup.py bdist_wheel --dist-dir ..\out\python

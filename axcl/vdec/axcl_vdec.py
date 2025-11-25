@@ -149,10 +149,10 @@ def init(mod_attr: dict) -> int:
         c_mode_attr.dict2struct(mod_attr)
         ret = libaxcl_vdec.AXCL_VDEC_Init(byref(c_mode_attr))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def deinit() -> int:
@@ -176,10 +176,10 @@ def deinit() -> int:
         libaxcl_vdec.AXCL_VDEC_Deinit.argtypes = None
         ret = libaxcl_vdec.AXCL_VDEC_Deinit()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def extract_stream_header_info(stream_buf: dict, video_type: int) -> tuple[dict, int]:
@@ -215,10 +215,10 @@ def extract_stream_header_info(stream_buf: dict, video_type: int) -> tuple[dict,
         if ret == AXCL_SUCC:
             bit_stream_info = c_bit_stream_info.struct2dict()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return bit_stream_info, ret
+    return bit_stream_info, ret
 
 
 def create_grp(grp: int, grp_attr: dict) -> int:
@@ -247,10 +247,10 @@ def create_grp(grp: int, grp_attr: dict) -> int:
         c_grp_attr.dict2struct(grp_attr)
         ret = libaxcl_vdec.AXCL_VDEC_CreateGrp(c_grp, byref(c_grp_attr))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def create_grp_ex(grp_attr: dict) -> tuple[int, int]:
@@ -297,10 +297,10 @@ def create_grp_ex(grp_attr: dict) -> tuple[int, int]:
         c_grp_attr.dict2struct(grp_attr)
         ret = libaxcl_vdec.AXCL_VDEC_CreateGrpEx(byref(c_grp), byref(c_grp_attr))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_grp.value, ret
+    return c_grp.value, ret
 
 
 def destroy_grp(grp: int) -> int:
@@ -325,10 +325,10 @@ def destroy_grp(grp: int) -> int:
         libaxcl_vdec.AXCL_VDEC_DestroyGrp.argtypes = [AX_VDEC_GRP]
         ret = libaxcl_vdec.AXCL_VDEC_DestroyGrp(AX_VDEC_GRP(grp))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def get_grp_attr(grp: int) -> tuple[dict, int]:
@@ -361,10 +361,10 @@ def get_grp_attr(grp: int) -> tuple[dict, int]:
         if ret == AXCL_SUCC:
             grp_attr = c_grp_attr.struct2dict()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return grp_attr, ret
+    return grp_attr, ret
 
 
 def set_grp_attr(grp: int, grp_attr: dict) -> int:
@@ -393,10 +393,10 @@ def set_grp_attr(grp: int, grp_attr: dict) -> int:
         c_grp_attr.dict2struct(grp_attr)
         ret = libaxcl_vdec.AXCL_VDEC_SetGrpAttr(c_grp, byref(c_grp_attr))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def start_recv_stream(grp: int, recv_param: dict) -> int:
@@ -435,10 +435,10 @@ def start_recv_stream(grp: int, recv_param: dict) -> int:
         c_recv_param.dict2struct(recv_param)
         ret = libaxcl_vdec.AXCL_VDEC_StartRecvStream(c_grp, byref(c_recv_param))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def stop_recv_stream(grp: int) -> int:
@@ -464,10 +464,10 @@ def stop_recv_stream(grp: int) -> int:
         c_grp = AX_VDEC_GRP(grp)
         ret = libaxcl_vdec.AXCL_VDEC_StopRecvStream(c_grp)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def query_status(grp: int) -> tuple[dict, int]:
@@ -510,10 +510,10 @@ def query_status(grp: int) -> tuple[dict, int]:
         if ret == AXCL_SUCC:
             grp_status = c_grp_status.struct2dict()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return grp_status, ret
+    return grp_status, ret
 
 
 def reset_grp(grp: int) -> int:
@@ -539,10 +539,10 @@ def reset_grp(grp: int) -> int:
         c_grp = AX_VDEC_GRP(grp)
         ret = libaxcl_vdec.AXCL_VDEC_ResetGrp(c_grp)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def set_grp_param(grp: int, grp_param: dict) -> int:
@@ -584,10 +584,10 @@ def set_grp_param(grp: int, grp_param: dict) -> int:
         c_grp_param.dict2struct(grp_param)
         ret = libaxcl_vdec.AXCL_VDEC_SetGrpParam(c_grp, byref(c_grp_param))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def get_grp_param(grp: int) -> tuple[dict, int]:
@@ -620,10 +620,10 @@ def get_grp_param(grp: int) -> tuple[dict, int]:
         if ret == AXCL_SUCC:
             grp_param = c_grp_param.struct2dict()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return grp_param, ret
+    return grp_param, ret
 
 
 def select_grp(ms: int) -> tuple[dict, int]:
@@ -669,10 +669,10 @@ def select_grp(ms: int) -> tuple[dict, int]:
         if ret == AXCL_SUCC:
             grp_set = c_grp_set.struct2dict()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return grp_set, ret
+    return grp_set, ret
 
 
 def send_stream(grp: int, stream: dict, ms: int) -> int:
@@ -720,10 +720,10 @@ def send_stream(grp: int, stream: dict, ms: int) -> int:
         c_ms = AX_S32(ms)
         ret = libaxcl_vdec.AXCL_VDEC_SendStream(c_grp, byref(c_stream), c_ms)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def get_chn_frame(grp: int, chn: int, ms: int) -> tuple[dict, int]:
@@ -774,10 +774,10 @@ def get_chn_frame(grp: int, chn: int, ms: int) -> tuple[dict, int]:
         if ret == AXCL_SUCC:
             frame_info = c_frame_info.struct2dict()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return frame_info, ret
+    return frame_info, ret
 
 
 def release_chn_frame(grp: int, chn: int, frame_info: dict) -> int:
@@ -816,10 +816,10 @@ def release_chn_frame(grp: int, chn: int, frame_info: dict) -> int:
         c_frame_info.dict2struct(frame_info)
         ret = libaxcl_vdec.AXCL_VDEC_ReleaseChnFrame(c_grp, c_chn, byref(c_frame_info))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def get_user_data(grp: int) -> tuple[dict, int]:
@@ -860,10 +860,10 @@ def get_user_data(grp: int) -> tuple[dict, int]:
         if ret == AXCL_SUCC:
             user_data = c_user_data.struct2dict()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return user_data, ret
+    return user_data, ret
 
 
 def release_user_data(grp: int, user_data: dict) -> int:
@@ -892,10 +892,10 @@ def release_user_data(grp: int, user_data: dict) -> int:
         c_user_data.dict2struct(user_data)
         ret = libaxcl_vdec.AXCL_VDEC_ReleaseUserData(c_grp, byref(c_user_data))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def set_user_pic(grp: int, user_pic: dict) -> int:
@@ -924,10 +924,10 @@ def set_user_pic(grp: int, user_pic: dict) -> int:
         c_user_pic.dict2struct(user_pic)
         ret = libaxcl_vdec.AXCL_VDEC_SetUserPic(c_grp, byref(c_user_pic))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def enable_user_pic(grp: int) -> int:
@@ -953,10 +953,10 @@ def enable_user_pic(grp: int) -> int:
         c_grp = AX_VDEC_GRP(grp)
         ret = libaxcl_vdec.AXCL_VDEC_EnableUserPic(c_grp)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def disable_user_pic(grp: int) -> int:
@@ -982,10 +982,10 @@ def disable_user_pic(grp: int) -> int:
         c_grp = AX_VDEC_GRP(grp)
         ret = libaxcl_vdec.AXCL_VDEC_DisableUserPic(c_grp)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def set_display_mode(grp: int, display_mode: int) -> int:
@@ -1018,10 +1018,10 @@ def set_display_mode(grp: int, display_mode: int) -> int:
         c_display_mode = AX_VDEC_DISPLAY_MODE_E(display_mode)
         ret = libaxcl_vdec.AXCL_VDEC_SetDisplayMode(c_grp, c_display_mode)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def get_display_mode(grp: int) -> tuple[int, int]:
@@ -1054,10 +1054,10 @@ def get_display_mode(grp: int) -> tuple[int, int]:
         if ret == AXCL_SUCC:
             display_mode = c_display_mode.value
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return display_mode, ret
+    return display_mode, ret
 
 
 def attach_pool(grp: int, chn: int, pool: int) -> int:
@@ -1087,10 +1087,10 @@ def attach_pool(grp: int, chn: int, pool: int) -> int:
         c_pool_id = AX_POOL(pool)
         ret = libaxcl_vdec.AXCL_VDEC_AttachPool(c_grp, c_chn, c_pool_id)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def detach_pool(grp: int, chn: int) -> int:
@@ -1118,10 +1118,10 @@ def detach_pool(grp: int, chn: int) -> int:
         c_chn = AX_VDEC_CHN(chn)
         ret = libaxcl_vdec.AXCL_VDEC_DetachPool(c_grp, c_chn)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def enable_chn(grp: int, chn: int) -> int:
@@ -1149,10 +1149,10 @@ def enable_chn(grp: int, chn: int) -> int:
         c_chn = AX_VDEC_CHN(chn)
         ret = libaxcl_vdec.AXCL_VDEC_EnableChn(c_grp, c_chn)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def disable_chn(grp: int, chn: int) -> int:
@@ -1180,10 +1180,10 @@ def disable_chn(grp: int, chn: int) -> int:
         c_chn = AX_VDEC_CHN(chn)
         ret = libaxcl_vdec.AXCL_VDEC_DisableChn(c_grp, c_chn)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def set_chn_attr(grp: int, chn: int, chn_attr: dict) -> int:
@@ -1277,10 +1277,10 @@ def set_chn_attr(grp: int, chn: int, chn_attr: dict) -> int:
         c_chn_attr.dict2struct(chn_attr)
         ret = libaxcl_vdec.AXCL_VDEC_SetChnAttr(c_grp, c_chn, byref(c_chn_attr))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def get_chn_attr(grp: int, chn: int) -> tuple[dict, int]:
@@ -1314,10 +1314,10 @@ def get_chn_attr(grp: int, chn: int) -> tuple[dict, int]:
         if ret == AXCL_SUCC:
             chn_attr = c_chn_attr.struct2dict()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return chn_attr, ret
+    return chn_attr, ret
 
 
 def jpeg_decode_one_frame(param: dict) -> int:
@@ -1344,10 +1344,10 @@ def jpeg_decode_one_frame(param: dict) -> int:
         c_param.dict2struct(param)
         ret = libaxcl_vdec.AXCL_VDEC_JpegDecodeOneFrame(byref(c_param))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def get_vui_param(grp: int) -> tuple[dict, int]:
@@ -1380,7 +1380,7 @@ def get_vui_param(grp: int) -> tuple[dict, int]:
         if ret == AXCL_SUCC:
             vui_param = c_vui_param.struct2dict()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return vui_param, ret
+    return vui_param, ret

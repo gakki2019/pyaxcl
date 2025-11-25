@@ -57,10 +57,10 @@ def set_device(device_id: int) -> int:
 
         ret = libaxcl_rt.axclrtSetDevice(deviceId)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def reset_device(device_id: int) -> int:
@@ -91,10 +91,10 @@ def reset_device(device_id: int) -> int:
 
         ret = libaxcl_rt.axclrtResetDevice(deviceId)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def get_device() -> tuple[int, int]:
@@ -126,10 +126,10 @@ def get_device() -> tuple[int, int]:
 
         ret = libaxcl_rt.axclrtGetDevice(byref(deviceId))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return deviceId.value, ret
+    return deviceId.value, ret
 
 
 def get_device_count() -> tuple[int, int]:
@@ -158,10 +158,10 @@ def get_device_count() -> tuple[int, int]:
 
         ret = libaxcl_rt.axclrtGetDeviceCount(byref(count))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return count.value, ret
+    return count.value, ret
 
 
 def get_device_list() -> tuple[list, int]:
@@ -194,10 +194,10 @@ def get_device_list() -> tuple[list, int]:
             for i in range(deviceList.num):
                 dev_list.append(deviceList.devices[i])
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return dev_list, ret
+    return dev_list, ret
 
 
 def synchronize_device() -> int:
@@ -221,10 +221,11 @@ def synchronize_device() -> int:
 
         ret = libaxcl_rt.axclrtSynchronizeDevice()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def get_device_properties(device_id: int) -> tuple[dict, int]:
     """
@@ -254,7 +255,7 @@ def get_device_properties(device_id: int) -> tuple[dict, int]:
 
         ret = libaxcl_rt.axclrtGetDeviceProperties(deviceId, byref(properties))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return properties.struct2dict(), ret
+    return properties.struct2dict(), ret

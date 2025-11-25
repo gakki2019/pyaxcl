@@ -40,8 +40,8 @@ def init(config):
     :returns: **ret** (*int*) - 0 indicates success, otherwise failure
     """
     ret = -1
-    c_config = c_char_p(0)
     try:
+        c_config = c_char_p(0)
         libaxcl_rt.axclInit.restype = axclError
         libaxcl_rt.axclInit.argtypes=[c_char_p]
 
@@ -50,10 +50,11 @@ def init(config):
 
         ret = libaxcl_rt.axclInit(c_config)
     except:
+        ret = -1
         print(sys.exc_info())
         print(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def finalize():
     """
@@ -77,10 +78,11 @@ def finalize():
 
         ret = libaxcl_rt.axclFinalize()
     except:
+        ret = -1
         print(sys.exc_info())
         print(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def set_log_level(level):
     """
@@ -93,10 +95,11 @@ def set_log_level(level):
         c_level = c_int32(level)
         ret = libaxcl_rt.axclSetLogLevel(c_level)
     except:
+        ret = -1
         print(sys.exc_info())
         print(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def app_log(level, func, file, line, message):
     """
@@ -117,10 +120,10 @@ def app_log(level, func, file, line, message):
     :param int line: code line.
     :param str message: log message.
     """
-    c_func = c_char_p(0)
-    c_file = c_char_p(0)
-    c_message = c_char_p(0)
     try:
+        c_func = c_char_p(0)
+        c_file = c_char_p(0)
+        c_message = c_char_p(0)
         libaxcl_rt.axclAppLog.restype = None
         libaxcl_rt.axclAppLog.argtypes = [c_int32, c_char_p, c_char_p, c_uint32, c_char_p]
         c_level = c_int32(level)

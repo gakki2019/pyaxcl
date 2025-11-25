@@ -44,10 +44,11 @@ def init() -> int:
         libaxcl_ivps.AXCL_IVPS_Init.argtypes = None
         ret = libaxcl_ivps.AXCL_IVPS_Init()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def deinit() -> int:
     """
@@ -71,10 +72,11 @@ def deinit() -> int:
         libaxcl_ivps.AXCL_IVPS_Deinit.argtypes = None
         ret = libaxcl_ivps.AXCL_IVPS_Deinit()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def create_grp(ivps_grp: int, grp_attr: int) -> int:
     """
@@ -103,10 +105,11 @@ def create_grp(ivps_grp: int, grp_attr: int) -> int:
         libaxcl_ivps.AXCL_IVPS_CreateGrp.argtypes = [c_int32, POINTER(AX_IVPS_GRP_ATTR_T)]
         ret = libaxcl_ivps.AXCL_IVPS_CreateGrp(c_int32(ivps_grp), byref(c_grp_attr))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def create_grp_ex(grp_attr: dict) -> tuple[int, int]:
     """
@@ -139,10 +142,11 @@ def create_grp_ex(grp_attr: dict) -> tuple[int, int]:
         libaxcl_ivps.AXCL_IVPS_CreateGrpEx.argtypes = [POINTER(c_int32), POINTER(AX_IVPS_GRP_ATTR_T)]
         ret = libaxcl_ivps.AXCL_IVPS_CreateGrpEx(byref(c_ivps_grp), byref(c_grp_attr))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_ivps_grp.value, ret
+    return c_ivps_grp.value, ret
+
 
 def destroy_grp(ivps_grp: int) -> int:
     """
@@ -167,10 +171,11 @@ def destroy_grp(ivps_grp: int) -> int:
         libaxcl_ivps.AXCL_IVPS_DestoryGrp.argtypes = [c_int32]
         ret = libaxcl_ivps.AXCL_IVPS_DestoryGrp(c_int32(ivps_grp))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def set_pipeline_attr(ivps_grp: int, pipeline_attr: dict) -> int:
     """
@@ -200,10 +205,11 @@ def set_pipeline_attr(ivps_grp: int, pipeline_attr: dict) -> int:
         libaxcl_ivps.AXCL_IVPS_SetPipelineAttr.argtypes = [c_int32, POINTER(AX_IVPS_PIPELINE_ATTR_T)]
         ret = libaxcl_ivps.AXCL_IVPS_SetPipelineAttr(c_int32(ivps_grp), byref(c_pipeline_attr))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def get_pipeline_attr(ivps_grp: int) -> tuple[dict, int]:
     """
@@ -226,8 +232,8 @@ def get_pipeline_attr(ivps_grp: int) -> tuple[dict, int]:
 
     """
     ret = -1
+    pipeline_attr = {}
     try:
-        pipeline_attr = {}
         c_pipeline_attr = AX_IVPS_PIPELINE_ATTR_T()
 
         libaxcl_ivps.AXCL_IVPS_GetPipelineAttr.restype = c_int32
@@ -237,10 +243,11 @@ def get_pipeline_attr(ivps_grp: int) -> tuple[dict, int]:
         if ret == AX_SUCCESS:
             pipeline_attr = c_pipeline_attr.struct2dict()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return pipeline_attr, ret
+    return pipeline_attr, ret
+
 
 def start_grp(ivps_grp: int) -> int:
     """
@@ -265,10 +272,11 @@ def start_grp(ivps_grp: int) -> int:
         libaxcl_ivps.AXCL_IVPS_StartGrp.argtypes = [c_int32]
         ret = libaxcl_ivps.AXCL_IVPS_StartGrp(c_int32(ivps_grp))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def stop_grp(ivps_grp: int) -> int:
     """
@@ -293,10 +301,11 @@ def stop_grp(ivps_grp: int) -> int:
         libaxcl_ivps.AXCL_IVPS_StopGrp.argtypes = [c_int32]
         ret = libaxcl_ivps.AXCL_IVPS_StopGrp(c_int32(ivps_grp))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def enable_chn(ivps_grp: int, ivps_chn: int) -> int:
     """
@@ -316,15 +325,17 @@ def enable_chn(ivps_grp: int, ivps_chn: int) -> int:
     :returns: **ret** (*int*) - 0 indicates success, otherwise failure
 
     """
+    ret = -1
     try:
         libaxcl_ivps.AXCL_IVPS_EnableChn.restype = c_int32
         libaxcl_ivps.AXCL_IVPS_EnableChn.argtypes = [c_int32, c_int32]
         ret = libaxcl_ivps.AXCL_IVPS_EnableChn(c_int32(ivps_grp), c_int32(ivps_chn))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def disable_chn(ivps_grp: int, ivps_chn: int) -> int:
     """
@@ -350,10 +361,11 @@ def disable_chn(ivps_grp: int, ivps_chn: int) -> int:
         libaxcl_ivps.AXCL_IVPS_DisableChn.argtypes = [c_int32, c_int32]
         ret = libaxcl_ivps.AXCL_IVPS_DisableChn(c_int32(ivps_grp), c_int32(ivps_chn))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def send_frame(ivps_grp: int, frame: dict, millisec: int) -> int:
     """
@@ -382,10 +394,11 @@ def send_frame(ivps_grp: int, frame: dict, millisec: int) -> int:
         libaxcl_ivps.AXCL_IVPS_SendFrame.argtypes = [c_int32, POINTER(AX_VIDEO_FRAME_T), c_int32]
         ret = libaxcl_ivps.AXCL_IVPS_SendFrame(c_int32(ivps_grp), byref(c_frame), c_int32(millisec))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def get_chn_frame(ivps_grp: int, ivps_chn: int, millisec: int) -> tuple[dict, int]:
     """
@@ -419,10 +432,11 @@ def get_chn_frame(ivps_grp: int, ivps_chn: int, millisec: int) -> tuple[dict, in
         if ret == AX_SUCCESS:
             frame = c_frame.struct2dict()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return frame, ret
+    return frame, ret
+
 
 def release_chn_frame(ivps_grp: int, ivps_chn: int, frame: dict) -> int:
     """
@@ -452,10 +466,11 @@ def release_chn_frame(ivps_grp: int, ivps_chn: int, frame: dict) -> int:
         libaxcl_ivps.AXCL_IVPS_ReleaseChnFrame.argtypes = [c_int32, c_int32, POINTER(AX_VIDEO_FRAME_T)]
         ret = libaxcl_ivps.AXCL_IVPS_ReleaseChnFrame(c_int32(ivps_grp), c_int32(ivps_chn), byref(c_frame))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def get_grp_frame(ivps_grp: int, millisec: int) -> tuple[dict, int]:
     """
@@ -488,10 +503,11 @@ def get_grp_frame(ivps_grp: int, millisec: int) -> tuple[dict, int]:
         if ret == AX_SUCCESS:
             frame = c_frame.struct2dict()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return frame, ret
+    return frame, ret
+
 
 def release_grp_frame(ivps_grp: int, frame: dict) -> int:
     """
@@ -520,10 +536,10 @@ def release_grp_frame(ivps_grp: int, frame: dict) -> int:
         libaxcl_ivps.AXCL_IVPS_ReleaseGrpFrame.argtypes = [c_int32, POINTER(AX_VIDEO_FRAME_T)]
         ret = libaxcl_ivps.AXCL_IVPS_ReleaseGrpFrame(c_int32(ivps_grp), byref(c_frame))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def get_debug_fifo_frame(ivps_grp: int) -> tuple[dict, int]:
@@ -557,10 +573,11 @@ def get_debug_fifo_frame(ivps_grp: int) -> tuple[dict, int]:
         if ret == AX_SUCCESS:
             frame = c_frame.struct2dict()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return frame, ret
+    return frame, ret
+
 
 def release_debug_fifo_frame(ivps_grp: int, frame: dict) -> int:
     """
@@ -588,10 +605,10 @@ def release_debug_fifo_frame(ivps_grp: int, frame: dict) -> int:
         libaxcl_ivps.AXCL_IVPS_ReleaseDebugFifoFrame.argtypes = [c_int32, POINTER(AX_VIDEO_FRAME_T)]
         ret = libaxcl_ivps.AXCL_IVPS_ReleaseDebugFifoFrame(c_int32(ivps_grp), byref(c_frame))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def set_grp_ldc_attr(ivps_grp: int, ivps_filter: int, ldc_attr: dict) -> int:
@@ -622,10 +639,11 @@ def set_grp_ldc_attr(ivps_grp: int, ivps_filter: int, ldc_attr: dict) -> int:
         libaxcl_ivps.AXCL_IVPS_SetGrpLDCAttr.argtypes = [c_int32, c_int32, POINTER(AX_IVPS_LDC_ATTR_T)]
         ret = libaxcl_ivps.AXCL_IVPS_SetGrpLDCAttr(c_int32(ivps_grp), c_int32(ivps_filter), byref(c_ldc_attr))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def get_grp_ldc_attr(ivps_grp: int, ivps_filter: int) -> tuple[dict, int]:
     """
@@ -659,10 +677,11 @@ def get_grp_ldc_attr(ivps_grp: int, ivps_filter: int) -> tuple[dict, int]:
         if ret == AX_SUCCESS:
             ldc_attr = c_ldc_attr.struct2dict()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ldc_attr, ret
+    return ldc_attr, ret
+
 
 def set_chn_ldc_attr(ivps_grp: int, ivps_chn: int, ivps_filter: int, ldc_attr: dict) -> int:
     """
@@ -692,10 +711,11 @@ def set_chn_ldc_attr(ivps_grp: int, ivps_chn: int, ivps_filter: int, ldc_attr: d
         libaxcl_ivps.AXCL_IVPS_SetChnLDCAttr.argtypes = [c_int32, c_int32, c_int32, POINTER(AX_IVPS_LDC_ATTR_T)]
         ret = libaxcl_ivps.AXCL_IVPS_SetChnLDCAttr(c_int32(ivps_grp), c_int32(ivps_chn), c_int32(ivps_filter), byref(c_ldc_attr))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def get_chn_ldc_attr(ivps_grp: int, ivps_chn: int, ivps_filter: int) -> tuple[dict, int]:
     """
@@ -730,10 +750,11 @@ def get_chn_ldc_attr(ivps_grp: int, ivps_chn: int, ivps_filter: int) -> tuple[di
         if ret == AX_SUCCESS:
             ldc_attr = c_ldc_attr.struct2dict()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ldc_attr, ret
+    return ldc_attr, ret
+
 
 def set_grp_pool_attr(ivps_grp: int, pool_attr: dict) -> int:
     """
@@ -762,10 +783,11 @@ def set_grp_pool_attr(ivps_grp: int, pool_attr: dict) -> int:
         libaxcl_ivps.AXCL_IVPS_SetGrpPoolAttr.argtypes = [c_int32, POINTER(AX_IVPS_POOL_ATTR_T)]
         ret = libaxcl_ivps.AXCL_IVPS_SetGrpPoolAttr(c_int32(ivps_grp), byref(c_pool_attr))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def set_chn_pool_attr(ivps_grp: int, ivps_chn: int, pool_attr: dict) -> int:
     """
@@ -795,10 +817,11 @@ def set_chn_pool_attr(ivps_grp: int, ivps_chn: int, pool_attr: dict) -> int:
         libaxcl_ivps.AXCL_IVPS_SetChnPoolAttr.argtypes = [c_int32, c_int32, POINTER(AX_IVPS_POOL_ATTR_T)]
         ret = libaxcl_ivps.AXCL_IVPS_SetChnPoolAttr(c_int32(ivps_grp), c_int32(ivps_chn), byref(c_pool_attr))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def set_grp_user_frc(ivps_grp: int, framerate_attr: dict) -> int:
     """
@@ -827,10 +850,11 @@ def set_grp_user_frc(ivps_grp: int, framerate_attr: dict) -> int:
         libaxcl_ivps.AXCL_IVPS_SetGrpUserFRC.argtypes = [c_int32, POINTER(AX_IVPS_USER_FRAME_RATE_CTRL_T)]
         ret = libaxcl_ivps.AXCL_IVPS_SetGrpUserFRC(c_int32(ivps_grp), byref(c_framerate_attr))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def set_chn_user_frc(ivps_grp: int, ivps_chn: int, framerate_attr: dict) -> int:
     """
@@ -860,10 +884,11 @@ def set_chn_user_frc(ivps_grp: int, ivps_chn: int, framerate_attr: dict) -> int:
         libaxcl_ivps.AXCL_IVPS_SetChnUserFRC.argtypes = [c_int32, c_int32, POINTER(AX_IVPS_USER_FRAME_RATE_CTRL_T)]
         ret = libaxcl_ivps.AXCL_IVPS_SetChnUserFRC(c_int32(ivps_grp), c_int32(ivps_chn), byref(c_framerate_attr))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def set_grp_crop(ivps_grp: int, crop_info: dict) -> int:
     """
@@ -893,10 +918,11 @@ def set_grp_crop(ivps_grp: int, crop_info: dict) -> int:
         libaxcl_ivps.AXCL_IVPS_SetGrpCrop.argtypes = [c_int32, POINTER(AX_IVPS_CROP_INFO_T)]
         ret = libaxcl_ivps.AXCL_IVPS_SetGrpCrop(c_int32(ivps_grp), byref(c_crop_info))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def get_grp_crop(ivps_grp: int) -> tuple[dict, int]:
     """
@@ -929,10 +955,11 @@ def get_grp_crop(ivps_grp: int) -> tuple[dict, int]:
         if ret == AX_SUCCESS:
             crop_info = c_crop_info.struct2dict()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return crop_info, ret
+    return crop_info, ret
+
 
 def set_chn_attr(ivps_grp: int, ivps_chn: int, ivps_filter: int, chn_attr: dict) -> int:
     """
@@ -962,10 +989,11 @@ def set_chn_attr(ivps_grp: int, ivps_chn: int, ivps_filter: int, chn_attr: dict)
         libaxcl_ivps.AXCL_IVPS_SetChnAttr.argtypes = [c_int32, c_int32, c_int32, POINTER(AX_IVPS_CHN_ATTR_T)]
         ret = libaxcl_ivps.AXCL_IVPS_SetChnAttr(c_int32(ivps_grp), c_int32(ivps_chn), c_int32(ivps_filter), byref(c_chn_attr))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def get_chn_attr(ivps_grp: int, ivps_chn: int, ivps_filter: int) -> tuple[dict, int]:
     """
@@ -1000,10 +1028,11 @@ def get_chn_attr(ivps_grp: int, ivps_chn: int, ivps_filter: int) -> tuple[dict, 
         if ret == AX_SUCCESS:
             chn_attr = c_chn_attr.struct2dict()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return chn_attr, ret
+    return chn_attr, ret
+
 
 def enable_backup_frame(ivps_grp: int, fifo_depth: int) -> int:
     """
@@ -1029,10 +1058,11 @@ def enable_backup_frame(ivps_grp: int, fifo_depth: int) -> int:
         libaxcl_ivps.AXCL_IVPS_EnableBackupFrame.argtypes = [c_int32, c_uint8]
         ret = libaxcl_ivps.AXCL_IVPS_EnableBackupFrame(c_int32(ivps_grp), c_uint8(fifo_depth))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def disable_backup_frame(ivps_grp: int) -> int:
     """
@@ -1057,10 +1087,11 @@ def disable_backup_frame(ivps_grp: int) -> int:
         libaxcl_ivps.AXCL_IVPS_DisableBackupFrame.argtypes = [c_int32]
         ret = libaxcl_ivps.AXCL_IVPS_DisableBackupFrame(c_int32(ivps_grp))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def reset_grp(ivps_grp: int) -> int:
     """
@@ -1085,10 +1116,11 @@ def reset_grp(ivps_grp: int) -> int:
         libaxcl_ivps.AXCL_IVPS_ResetGrp.argtypes = [c_int32]
         ret = libaxcl_ivps.AXCL_IVPS_ResetGrp(c_int32(ivps_grp))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def get_engine_duty_cycle() -> tuple[dict, int]:
     """
@@ -1120,10 +1152,11 @@ def get_engine_duty_cycle() -> tuple[dict, int]:
         if ret == AX_SUCCESS:
             duty_cycle = c_duty_cycle.struct2dict()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return duty_cycle, ret
+    return duty_cycle, ret
+
 
 def rgn_create() -> int:
     """
@@ -1147,9 +1180,11 @@ def rgn_create() -> int:
         libaxcl_ivps.AXCL_IVPS_RGN_Create.argtypes = []
         handle = libaxcl_ivps.AXCL_IVPS_RGN_Create()
     except:
+        handle = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-        return handle
+    return handle
+
 
 def rgn_destroy(region: int) -> int:
     """
@@ -1174,10 +1209,11 @@ def rgn_destroy(region: int) -> int:
         libaxcl_ivps.AXCL_IVPS_RGN_Destroy.argtypes = [IVPS_RGN_HANDLE]
         ret = libaxcl_ivps.AXCL_IVPS_RGN_Destroy(region)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def rgn_attach_to_filter(region: int, ivps_grp: int, ivps_filter: dict) -> int:
     """
@@ -1204,10 +1240,11 @@ def rgn_attach_to_filter(region: int, ivps_grp: int, ivps_filter: dict) -> int:
         libaxcl_ivps.AXCL_IVPS_RGN_AttachToFilter.argtypes = [IVPS_RGN_HANDLE, c_int32, c_int32]
         ret = libaxcl_ivps.AXCL_IVPS_RGN_AttachToFilter(region, c_int32(ivps_grp), c_int32(ivps_filter))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def rgn_detach_from_filter(region: int, ivps_grp: int, ivps_filter: dict) -> int:
     """
@@ -1234,10 +1271,11 @@ def rgn_detach_from_filter(region: int, ivps_grp: int, ivps_filter: dict) -> int
         libaxcl_ivps.AXCL_IVPS_RGN_DetachFromFilter.argtypes = [IVPS_RGN_HANDLE, c_int32, c_int32]
         ret = libaxcl_ivps.AXCL_IVPS_RGN_DetachFromFilter(region, c_int32(ivps_grp), c_int32(ivps_filter))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def rgn_update(region: int, rgn_chn_attr: dict, disp_list: list[dict]) -> int:
     """
@@ -1272,10 +1310,11 @@ def rgn_update(region: int, rgn_chn_attr: dict, disp_list: list[dict]) -> int:
         libaxcl_ivps.AXCL_IVPS_RGN_Update.argtypes = [IVPS_RGN_HANDLE, POINTER(AX_IVPS_RGN_DISP_GROUP_T)]
         ret = libaxcl_ivps.AXCL_IVPS_RGN_Update(region, byref(c_disp))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def cmm_copy_tdp(src_phy_addr: int, dst_phy_addr: int, mem_size: int) -> int:
     """
@@ -1302,10 +1341,11 @@ def cmm_copy_tdp(src_phy_addr: int, dst_phy_addr: int, mem_size: int) -> int:
         libaxcl_ivps.AXCL_IVPS_CmmCopyTdp.argtypes = [c_uint64, c_uint64, c_uint64]
         ret = libaxcl_ivps.AXCL_IVPS_CmmCopyTdp(c_uint64(src_phy_addr), c_uint64(dst_phy_addr), c_uint64(mem_size))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def flip_and_rotation_tdp(src: dict, flip_mode: int, rotation: int, dst: dict) -> int:
     """
@@ -1345,10 +1385,11 @@ def flip_and_rotation_tdp(src: dict, flip_mode: int, rotation: int, dst: dict) -
         if ret == AX_SUCCESS:
             dst.update(c_dst.struct2dict())
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def csc_tdp(src: dict, dst: dict) -> int:
     """
@@ -1381,10 +1422,11 @@ def csc_tdp(src: dict, dst: dict) -> int:
         if ret == AX_SUCCESS:
             dst.update(c_dst.struct2dict())
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def crop_resize_tdp(src: dict, dst: dict, aspect_ratio: dict) -> int:
     """
@@ -1425,10 +1467,11 @@ def crop_resize_tdp(src: dict, dst: dict, aspect_ratio: dict) -> int:
         if ret == AX_SUCCESS:
             dst.update(c_dst.struct2dict())
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def crop_resize_v2_tdp(src: dict, box_list: list[dict], dst_list: list[dict], aspect_ratio: dict) -> int:
     """
@@ -1486,10 +1529,11 @@ def crop_resize_v2_tdp(src: dict, box_list: list[dict], dst_list: list[dict], as
             for idx in range(dst_num):
                 dst_list[idx].update(c_dst_array[idx].struct2dict())
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def alpha_blending_tdp(src: dict, overlay: dict, offset: dict, alpha: int, dst: dict) -> int:
     """
@@ -1538,10 +1582,11 @@ def alpha_blending_tdp(src: dict, overlay: dict, offset: dict, alpha: int, dst: 
         if ret == AX_SUCCESS:
             dst.update(c_dst.struct2dict())
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def alpha_blending_v3_tdp(src: dict, overlay: dict, dst: dict) -> int:
     """
@@ -1583,10 +1628,11 @@ def alpha_blending_v3_tdp(src: dict, overlay: dict, dst: dict) -> int:
         if ret == AX_SUCCESS:
             dst.update(c_dst.struct2dict())
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def draw_osd_tdp(src: dict, bmp_list: list[dict]) -> int:
     """
@@ -1625,10 +1671,11 @@ def draw_osd_tdp(src: dict, bmp_list: list[dict]) -> int:
         ]
         ret = libaxcl_ivps.AXCL_IVPS_DrawOsdTdp(byref(c_src), c_bmp_list, c_uint32(num))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def draw_mosaic_tdp(src: dict, mosaic_list: list[dict]) -> int:
     """
@@ -1663,10 +1710,11 @@ def draw_mosaic_tdp(src: dict, mosaic_list: list[dict]) -> int:
         libaxcl_ivps.AXCL_IVPS_DrawMosaicTdp.argtypes = [POINTER(AX_VIDEO_FRAME_T), POINTER(AX_IVPS_RGN_MOSAIC_T), c_uint32]
         ret = libaxcl_ivps.AXCL_IVPS_DrawMosaicTdp(byref(c_src), c_mosaic_list, c_uint32(num))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def cmm_copy_vpp(src_phy_addr: int, dst_phy_addr: int, mem_size: int) -> int:
     """
@@ -1693,10 +1741,11 @@ def cmm_copy_vpp(src_phy_addr: int, dst_phy_addr: int, mem_size: int) -> int:
         libaxcl_ivps.AXCL_IVPS_CmmCopyVpp.argtypes = [c_uint64, c_uint64, c_uint64]
         ret = libaxcl_ivps.AXCL_IVPS_CmmCopyVpp(c_uint64(src_phy_addr), c_uint64(dst_phy_addr), c_uint64(mem_size))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def crop_resize_vpp(src: dict, dst: dict, aspect_ratio: dict) -> int:
     """
@@ -1738,10 +1787,11 @@ def crop_resize_vpp(src: dict, dst: dict, aspect_ratio: dict) -> int:
         if ret == AX_SUCCESS:
             dst.update(c_dst.struct2dict())
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def crop_resize_v2_vpp(src: dict, box_list: list[dict], dst_list: list[dict], aspect_ratio: dict) -> int:
     """
@@ -1800,10 +1850,11 @@ def crop_resize_v2_vpp(src: dict, box_list: list[dict], dst_list: list[dict], as
                 dst_list[idx].update(c_dst_array[idx].struct2dict())
 
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def crop_resize_v3_vpp(src: dict, dst_list: list[dict], aspect_ratio: dict) -> int:
     """
@@ -1855,10 +1906,11 @@ def crop_resize_v3_vpp(src: dict, dst_list: list[dict], aspect_ratio: dict) -> i
                 dst_list[idx].update(c_dst_array[idx].struct2dict())
 
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def csc_vpp(src: dict, dst: dict) -> int:
     """
@@ -1892,10 +1944,11 @@ def csc_vpp(src: dict, dst: dict) -> int:
         if ret == AX_SUCCESS:
             dst.update(c_dst.struct2dict())
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def draw_mosaic_vpp(src: dict, mosaic_list: list[dict]) -> int:
     """
@@ -1934,10 +1987,11 @@ def draw_mosaic_vpp(src: dict, mosaic_list: list[dict]) -> int:
         ]
         ret = libaxcl_ivps.AXCL_IVPS_DrawMosaicVpp(byref(c_src), c_mosaic_list, c_uint32(num))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def set_scale_coef_level_vpp(scale_range: dict, coef_level: dict) -> int:
     """
@@ -1973,10 +2027,11 @@ def set_scale_coef_level_vpp(scale_range: dict, coef_level: dict) -> int:
 
         ret = libaxcl_ivps.AXCL_IVPS_SetScaleCoefLevelVpp(byref(c_scale_range), byref(c_coef_level))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def get_scale_coef_level_vpp(scale_range: dict) -> tuple[dict, int]:
     """
@@ -2016,10 +2071,11 @@ def get_scale_coef_level_vpp(scale_range: dict) -> tuple[dict, int]:
         if ret == AX_SUCCESS:
             coef_level = c_coef_level.struct2dict()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return coef_level, ret
+    return coef_level, ret
+
 
 def cmm_copy_vgp(src_phy_addr: int, dst_phy_addr: int, mem_size: int) -> int:
     """
@@ -2046,10 +2102,11 @@ def cmm_copy_vgp(src_phy_addr: int, dst_phy_addr: int, mem_size: int) -> int:
         libaxcl_ivps.AXCL_IVPS_CmmCopyVgp.argtypes = [c_uint64, c_uint64, c_uint64]
         ret = libaxcl_ivps.AXCL_IVPS_CmmCopyVgp(c_uint64(src_phy_addr), c_uint64(dst_phy_addr), c_uint64(mem_size))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def csc_vgp(src: dict, dst: dict) -> int:
     """
@@ -2084,10 +2141,11 @@ def csc_vgp(src: dict, dst: dict) -> int:
         if ret == AX_SUCCESS:
             dst.update(c_dst.struct2dict())
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def crop_resize_vgp(src: dict, dst: dict, aspect_ratio: dict) -> int:
     """
@@ -2129,10 +2187,11 @@ def crop_resize_vgp(src: dict, dst: dict, aspect_ratio: dict) -> int:
         if ret == AX_SUCCESS:
             dst.update(c_dst.struct2dict())
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def crop_resize_v2_vgp(src: dict, box_list: list[dict], dst_list: list[dict], aspect_ratio: dict) -> int:
     """
@@ -2189,10 +2248,11 @@ def crop_resize_v2_vgp(src: dict, box_list: list[dict], dst_list: list[dict], as
             for idx in range(crop_num):
                 dst_list[idx].update(c_dst_array[idx].struct2dict())
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def crop_resize_v4_vgp(src: dict, dst: dict, aspect_ratio: dict, scale_step: dict) -> int:
     """
@@ -2239,10 +2299,11 @@ def crop_resize_v4_vgp(src: dict, dst: dict, aspect_ratio: dict, scale_step: dic
         if ret == AX_SUCCESS:
             dst.update(c_dst.struct2dict())
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def alpha_blending_vgp(src: dict, overlay: dict, offset: dict, alpha: int, dst: dict) -> int:
     """
@@ -2291,10 +2352,11 @@ def alpha_blending_vgp(src: dict, overlay: dict, offset: dict, alpha: int, dst: 
         if ret == AX_SUCCESS:
             dst.update(c_dst.struct2dict())
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def alpha_blending_v2_vgp(src: dict, overlay: dict, offset: dict, alpha_lut: dict, dst: dict) -> int:
     """
@@ -2346,10 +2408,11 @@ def alpha_blending_v2_vgp(src: dict, overlay: dict, offset: dict, alpha_lut: dic
         if ret == AX_SUCCESS:
             dst.update(c_dst.struct2dict())
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def alpha_blending_v3_vgp(src: dict, overlay: dict, dst: dict) -> int:
     """
@@ -2391,10 +2454,11 @@ def alpha_blending_v3_vgp(src: dict, overlay: dict, dst: dict) -> int:
         if ret == AX_SUCCESS:
             dst.update(c_dst.struct2dict())
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def draw_osd_vgp(src: dict, bmp_list: list[dict]) -> int:
     """
@@ -2434,10 +2498,11 @@ def draw_osd_vgp(src: dict, bmp_list: list[dict]) -> int:
         ]
         ret = libaxcl_ivps.AXCL_IVPS_DrawOsdVgp(byref(c_src), c_bmp_list, c_uint32(num))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def draw_mosaic_vgp(src: dict, mosaic_list: list[dict]) -> int:
     """
@@ -2477,10 +2542,11 @@ def draw_mosaic_vgp(src: dict, mosaic_list: list[dict]) -> int:
         ]
         ret = libaxcl_ivps.AXCL_IVPS_DrawMosaicVgp(byref(c_src), c_mosaic_list, c_uint32(num))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def set_scale_coef_level_vgp(scale_range: dict, coef_level: dict) -> int:
     """
@@ -2517,10 +2583,11 @@ def set_scale_coef_level_vgp(scale_range: dict, coef_level: dict) -> int:
         ]
         ret = libaxcl_ivps.AXCL_IVPS_SetScaleCoefLevelVgp(byref(c_scale_range), byref(c_coef_level))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def get_scale_coef_level_vgp(scale_range: dict) -> tuple[dict, int]:
     """
@@ -2559,10 +2626,10 @@ def get_scale_coef_level_vgp(scale_range: dict) -> tuple[dict, int]:
         if ret == AX_SUCCESS:
             coef_level = c_coef_level.struct2dict()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return coef_level, ret
+    return coef_level, ret
 
 
 def draw_line(canvas: dict, gdi_attr: dict, point_list: list[dict]) -> int:
@@ -2607,10 +2674,11 @@ def draw_line(canvas: dict, gdi_attr: dict, point_list: list[dict]) -> int:
         ]
         ret = libaxcl_ivps.AXCL_IVPS_DrawLine(byref(c_canvas), c_gdi_attr, c_pt_list, c_uint32(point_num))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def draw_polygon(canvas: dict, gdi_attr: dict, point_list: list[dict]) -> int:
     """
@@ -2654,10 +2722,11 @@ def draw_polygon(canvas: dict, gdi_attr: dict, point_list: list[dict]) -> int:
         ]
         ret = libaxcl_ivps.AXCL_IVPS_DrawPolygon(byref(c_canvas), c_gdi_attr, c_pt_list, c_uint32(point_num))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def draw_rect(canvas: dict, gdi_attr: dict, rect: dict) -> int:
     """
@@ -2697,10 +2766,11 @@ def draw_rect(canvas: dict, gdi_attr: dict, rect: dict) -> int:
         ]
         ret = libaxcl_ivps.AXCL_IVPS_DrawRect(byref(c_canvas), c_gdi_attr, c_rect)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def dewarp(src: dict, dst: dict, dewarp_attr: dict) -> int:
     """
@@ -2742,10 +2812,11 @@ def dewarp(src: dict, dst: dict, dewarp_attr: dict) -> int:
         if ret == AX_SUCCESS:
             dst.update(c_dst.struct2dict())
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def pyra_lite_gen(src_pyra: dict, dst_pyra: dict, mask: bool) -> int:
     """
@@ -2784,10 +2855,11 @@ def pyra_lite_gen(src_pyra: dict, dst_pyra: dict, mask: bool) -> int:
         if ret == AX_SUCCESS:
             dst_pyra.update(c_dst.struct2dict())
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def pyra_lite_rcn(src_pyra: dict, dst_pyra: dict, bottom: bool) -> int:
     """
@@ -2826,10 +2898,11 @@ def pyra_lite_rcn(src_pyra: dict, dst_pyra: dict, bottom: bool) -> int:
         if ret == AX_SUCCESS:
             dst_pyra.update(c_dst.struct2dict())
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def gdc_work_create() -> tuple[int, int]:
     """
@@ -2857,10 +2930,11 @@ def gdc_work_create() -> tuple[int, int]:
         libaxcl_ivps.AXCL_IVPS_GdcWorkCreate.argtypes = [POINTER(GDC_HANDLE)]
         ret = libaxcl_ivps.AXCL_IVPS_GdcWorkCreate(byref(c_gdc_handle))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_gdc_handle.value, ret
+    return c_gdc_handle.value, ret
+
 
 def gdc_work_attr_set(gdc_handle: int, gdc_attr: dict) -> int:
     """
@@ -2892,10 +2966,11 @@ def gdc_work_attr_set(gdc_handle: int, gdc_attr: dict) -> int:
         ]
         ret = libaxcl_ivps.AXCL_IVPS_GdcWorkAttrSet(gdc_handle, byref(c_gdc_attr))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def gdc_work_run(gdc_handle: int, src: dict, dst: dict) -> int:
     """
@@ -2934,10 +3009,11 @@ def gdc_work_run(gdc_handle: int, src: dict, dst: dict) -> int:
         if ret == AX_SUCCESS:
             dst.update(c_dst.struct2dict())
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def gdc_work_destroy(gdc_handle: int) -> int:
     """
@@ -2962,10 +3038,11 @@ def gdc_work_destroy(gdc_handle: int) -> int:
         libaxcl_ivps.AXCL_IVPS_GdcWorkDestroy.argtypes = [GDC_HANDLE]
         ret = libaxcl_ivps.AXCL_IVPS_GdcWorkDestroy(gdc_handle)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
+
 
 def fisheye_point_query_dst2src(dst_point: dict, input_w: int, input_h: int, rgn_idx: int, fisheye_attr: dict) -> tuple[dict, int]:
     """
@@ -3017,10 +3094,11 @@ def fisheye_point_query_dst2src(dst_point: dict, input_w: int, input_h: int, rgn
         if ret == AX_SUCCESS:
             src_point = c_dst_point.struct2dict()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return src_point, ret
+    return src_point, ret
+
 
 def fisheye_point_query_src2dst(src_point: dict, input_w: int, input_h: int, rgn_idx: int, fisheye_attr: dict) -> tuple[dict, int]:
     """
@@ -3071,7 +3149,7 @@ def fisheye_point_query_src2dst(src_point: dict, input_w: int, input_h: int, rgn
         if ret == AX_SUCCESS:
             dst_point = c_dst_point.struct2dict()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return dst_point, ret
+    return dst_point, ret

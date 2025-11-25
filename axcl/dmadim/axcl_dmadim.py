@@ -46,10 +46,10 @@ def open(sync: bool) -> int:
         c_sync = AX_S32(1 if sync else 0)
         ret = libaxcl_dmadim.AXCL_DMADIM_Open(c_sync)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def cfg(dma_chn: int, dma_msg: dict) -> int:
@@ -95,10 +95,10 @@ def cfg(dma_chn: int, dma_msg: dict) -> int:
 
         ret = libaxcl_dmadim.AXCL_DMADIM_Cfg(c_dma_chn, byref(c_dma_msg))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def start(dma_chn: int, dma_id: int) -> int:
@@ -126,10 +126,10 @@ def start(dma_chn: int, dma_id: int) -> int:
         c_id = AX_S32(dma_id)
         ret = libaxcl_dmadim.AXCL_DMADIM_Start(c_dma_chn, c_id)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def wait_done(dma_chn: int, dma_id: int, timeout: int) -> tuple[dict, int]:
@@ -169,10 +169,10 @@ def wait_done(dma_chn: int, dma_id: int, timeout: int) -> tuple[dict, int]:
         xfer_stat['checksum'] = c_xfer_stat.u32CheckSum
         xfer_stat['stat'] = c_xfer_stat.u32Stat
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return xfer_stat, ret
+    return xfer_stat, ret
 
 
 def close(dma_chn: int) -> int:
@@ -198,10 +198,10 @@ def close(dma_chn: int) -> int:
         c_dma_chn = AX_S32(dma_chn)
         ret = libaxcl_dmadim.AXCL_DMADIM_Close(c_dma_chn)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def mem_copy(phy_dst: int, phy_src: int, size: int) -> int:
@@ -237,10 +237,10 @@ def mem_copy(phy_dst: int, phy_src: int, size: int) -> int:
         c_size = AX_U64(size)
         ret = libaxcl_dmadim.AXCL_DMA_MemCopy(c_phy_dst, c_phy_src, c_size)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def mem_set(phy_dst: dict, init_val: int, size: int) -> int:
@@ -273,10 +273,10 @@ def mem_set(phy_dst: dict, init_val: int, size: int) -> int:
         c_size = AX_U64(size)
         ret = libaxcl_dmadim.AXCL_DMA_MemSet(c_phy_dst, c_init_val, c_size)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def mem_copy_xd(dim_desc: dict, mode: int) -> int:
@@ -328,10 +328,10 @@ def mem_copy_xd(dim_desc: dict, mode: int) -> int:
 
         ret = libaxcl_dmadim.AXCL_DMA_MemCopyXD(c_dim_desc, c_mode)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def checksum(phy_src: int, size: int) -> int:
@@ -367,7 +367,7 @@ def checksum(phy_src: int, size: int) -> int:
 
         ret = libaxcl_dmadim.AXCL_DMA_CheckSum(byref(c_result), c_phy_src, c_size)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_result.value, ret
+    return c_result.value, ret

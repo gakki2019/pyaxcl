@@ -64,10 +64,10 @@ def set_config(pool_floor_plan: list) -> int:
 
             ret = libaxcl_sys.AXCL_POOL_SetConfig(byref(plan))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def get_config() -> tuple[list, int]:
@@ -108,10 +108,10 @@ def get_config() -> tuple[list, int]:
                     pool['pool_name'] = cast(plan.CommPool[i].PoolName, c_char_p).value.decode('utf-8')
                     pool_floor_plan.append(pool)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return pool_floor_plan, ret
+    return pool_floor_plan, ret
 
 
 def init() -> int:
@@ -134,10 +134,10 @@ def init() -> int:
         libaxcl_sys.AXCL_POOL_Init.restype = AX_S32
         ret = libaxcl_sys.AXCL_POOL_Init()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def exit() -> int:
@@ -160,10 +160,10 @@ def exit() -> int:
         libaxcl_sys.AXCL_POOL_Exit.restype = AX_S32
         ret = libaxcl_sys.AXCL_POOL_Exit()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def create_pool(pool_config: dict) -> int:
@@ -202,10 +202,10 @@ def create_pool(pool_config: dict) -> int:
 
             pool_id = libaxcl_sys.AXCL_POOL_CreatePool(byref(config))
     except:
+        pool_id = AX_INVALID_POOLID
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return pool_id
+    return pool_id
 
 
 def destroy_pool(pool_id: int) -> int:
@@ -231,10 +231,10 @@ def destroy_pool(pool_id: int) -> int:
         c_pool_id = AX_POOL(pool_id)
         ret = libaxcl_sys.AXCL_POOL_DestroyPool(c_pool_id)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def get_block(pool_id: int, blk_size: int, partition_name: str) -> int:
@@ -267,10 +267,10 @@ def get_block(pool_id: int, blk_size: int, partition_name: str) -> int:
 
         blk_id = libaxcl_sys.AXCL_POOL_GetBlock(c_pool_id, c_blk_size, c_partition_name)
     except:
+        blk_id = AX_INVALID_BLOCKID
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return blk_id
+    return blk_id
 
 
 def release_block(blk_id: int) -> int:
@@ -297,10 +297,10 @@ def release_block(blk_id: int) -> int:
 
         ret = libaxcl_sys.AXCL_POOL_ReleaseBlock(c_blk_id)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def phy_addr_to_handle(phy_addr: int) -> int:
@@ -327,10 +327,10 @@ def phy_addr_to_handle(phy_addr: int) -> int:
 
         blk_id = libaxcl_sys.AXCL_POOL_PhysAddr2Handle(c_phy_addr)
     except:
+        blk_id = AX_INVALID_BLOCKID
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return blk_id
+    return blk_id
 
 
 def handle_to_phy_addr(blk_id: int) -> int:
@@ -349,7 +349,7 @@ def handle_to_phy_addr(blk_id: int) -> int:
     :param int blk_id: block id
     :returns: **phy_addr** (*int*) - physical address
     """
-    phy_addr = AX_U64(0)
+    phy_addr = 0
     try:
         libaxcl_sys.AXCL_POOL_Handle2PhysAddr.restype = AX_U64
         libaxcl_sys.AXCL_POOL_Handle2PhysAddr.argtypes=[AX_BLK]
@@ -357,10 +357,10 @@ def handle_to_phy_addr(blk_id: int) -> int:
 
         phy_addr = libaxcl_sys.AXCL_POOL_Handle2PhysAddr(c_blk_id)
     except:
+        phy_addr = 0
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return phy_addr
+    return phy_addr
 
 
 def handle_to_meta_phy_addr(blk_id: int) -> int:
@@ -379,7 +379,7 @@ def handle_to_meta_phy_addr(blk_id: int) -> int:
     :param int blk_id: block id
     :returns: **phy_addr** (*int*) - meta physical address
     """
-    phy_addr = AX_U64(0)
+    phy_addr = 0
     try:
         libaxcl_sys.AXCL_POOL_Handle2MetaPhysAddr.restype = AX_U64
         libaxcl_sys.AXCL_POOL_Handle2MetaPhysAddr.argtypes=[AX_BLK]
@@ -387,10 +387,10 @@ def handle_to_meta_phy_addr(blk_id: int) -> int:
 
         phy_addr = libaxcl_sys.AXCL_POOL_Handle2MetaPhysAddr(c_blk_id)
     except:
+        phy_addr = 0
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return phy_addr
+    return phy_addr
 
 
 def handle_to_pool_id(blk_id: int) -> int:
@@ -417,10 +417,10 @@ def handle_to_pool_id(blk_id: int) -> int:
 
         pool_id = libaxcl_sys.AXCL_POOL_Handle2PoolId(c_blk_id)
     except:
+        pool_id = AX_INVALID_POOLID
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return pool_id
+    return pool_id
 
 
 def handle_to_blk_size(blk_id: int) -> int:
@@ -439,7 +439,7 @@ def handle_to_blk_size(blk_id: int) -> int:
     :param int blk_id: block id
     :returns: **blk_size** (*int*) - block size
     """
-    blk_size = AX_U64(0)
+    blk_size = 0
     try:
         libaxcl_sys.AXCL_POOL_Handle2BlkSize.restype = AX_U64
         libaxcl_sys.AXCL_POOL_Handle2BlkSize.argtypes=[AX_BLK]
@@ -447,10 +447,10 @@ def handle_to_blk_size(blk_id: int) -> int:
 
         blk_size = libaxcl_sys.AXCL_POOL_Handle2BlkSize(c_blk_id)
     except:
+        blk_size = 0
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return blk_size
+    return blk_size
 
 
 def mmap_pool(pool_id: int) -> int:
@@ -477,10 +477,10 @@ def mmap_pool(pool_id: int) -> int:
 
         ret = libaxcl_sys.AXCL_POOL_MmapPool(c_pool_id)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def munmap_pool(pool_id: int) -> int:
@@ -507,10 +507,10 @@ def munmap_pool(pool_id: int) -> int:
 
         ret = libaxcl_sys.AXCL_POOL_MunmapPool(c_pool_id)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def get_block_vir_addr(blk_id: int) -> int:
@@ -529,7 +529,7 @@ def get_block_vir_addr(blk_id: int) -> int:
     :param int blk_id: block id
     :returns: **vir_addr** (*int*) - virtual address
     """
-    vir_addr = None
+    vir_addr = 0
     try:
         libaxcl_sys.AXCL_POOL_GetBlockVirAddr.restype = c_void_p
         libaxcl_sys.AXCL_POOL_GetBlockVirAddr.argtypes=[AX_BLK]
@@ -537,10 +537,10 @@ def get_block_vir_addr(blk_id: int) -> int:
 
         vir_addr = libaxcl_sys.AXCL_POOL_GetBlockVirAddr(c_blk_id)
     except:
+        vir_addr = 0
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return vir_addr
+    return vir_addr
 
 
 def get_meta_vir_addr(blk_id: int) -> int:
@@ -559,7 +559,7 @@ def get_meta_vir_addr(blk_id: int) -> int:
     :param int blk_id: block id
     :returns: **vir_addr** (*int*) - virtual address
     """
-    vir_addr = None
+    vir_addr = 0
     try:
         libaxcl_sys.AXCL_POOL_GetMetaVirAddr.restype = c_void_p
         libaxcl_sys.AXCL_POOL_GetMetaVirAddr.argtypes=[AX_BLK]
@@ -567,10 +567,10 @@ def get_meta_vir_addr(blk_id: int) -> int:
 
         vir_addr = libaxcl_sys.AXCL_POOL_GetMetaVirAddr(c_blk_id)
     except:
+        vir_addr = 0
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return vir_addr
+    return vir_addr
 
 
 def increase_ref_cnt(blk_id: int) -> int:
@@ -597,10 +597,10 @@ def increase_ref_cnt(blk_id: int) -> int:
 
         ret = libaxcl_sys.AXCL_POOL_IncreaseRefCnt(c_blk_id)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def decrease_ref_cnt(blk_id: int) -> int:
@@ -627,7 +627,7 @@ def decrease_ref_cnt(blk_id: int) -> int:
 
         ret = libaxcl_sys.AXCL_POOL_DecreaseRefCnt(c_blk_id)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
