@@ -50,7 +50,7 @@ Python >= 3.9 64bit
                |-- axcl
                |-- sample
                |-- test
-               |-- build_win64.bat
+               |-- build.bat
                |-- setup.py
                |-- version.make
    ```
@@ -59,7 +59,7 @@ Python >= 3.9 64bit
 
    ```cmd
    cd pyaxcl
-   ./build_win64.bat
+   ./build.bat
    
    # 编译输出
    running bdist_wheel
@@ -76,7 +76,12 @@ Python >= 3.9 64bit
    removing build\bdist.win-amd64\wheel
    ```
 
-4.  添加或修改Windows系统环境变量： **AXCL_LIB_PATH**：安装目录的axcl_win_x64/bin的绝对路径。例如：
+4.  添加或修改Windows**系统环境变量**： **AXCL_LIB_PATH**：安装目录的axcl_win_x64/bin的绝对路径。例如：
+    
+    ```cmd
+    C:\Users\AXERA>echo %AXCL_LIB_PATH%
+    E:\User\AXCL\axcl\out\axcl_win_x64\bin
+    ```
     
 5. pip install 安装 pyaxcl
 
@@ -88,8 +93,11 @@ Python >= 3.9 64bit
    Type "help", "copyright", "credits" or "license" for more information.
    >>> import axcl
    >>> exit()
+   
+   # 卸载
+   pip3 uninstall pyAXCL -y
    ```
-
+   
    
 
 ### Linux
