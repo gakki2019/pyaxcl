@@ -14,28 +14,32 @@ from axclite.axclite_resource import AxcliteResource
 
 
 class AxcliteDevice(AxcliteResource):
-    def __init__(self, device_id):
+    def __init__(self):
         super().__init__(self.__class__.__name__)
-        self._device_id = device_id
+        self._device_id = 0
         self._inited = False
 
     @property
     def device_id(self):
         return self._device_id
 
-    def create(self) -> bool:
-        if self._device_id <= 0:
-            # auto select one device from connected list
-            devices, ret = axcl.rt.get_device_list()
-            if ret != axcl.AXCL_SUCC:
-                print(f"get connected the list of devices fail, ret = 0x{ret&0xFFFFFFFF:x}")
-                return False
+    def create(self, device_index) -> bool:
+        devices, ret = axcl.rt.get_device_list()
+        if ret != axcl.AXCL_SUCC:
+            print(f"get connected the list of devices fail, ret = 0x{ret&0xFFFFFFFF:x}")
+            return False
 
-            if len(devices) == 0:
-                print("no device is connected")
-                return False
+        device_num = len(devices)
+        if device_num == 0:
+            print("no device is connected")
+            return False
 
-            self._device_id = devices[0]
+        if device_index >= device_num:
+            print(f"device index: {device_index} is out of connected device number {device_num}")
+            return False
+
+        self._device_id = devices[device_index]
+        print(f"device index: {device_index}, bus number: {self._device_id}")
 
         ret = axcl.rt.set_device(self._device_id)
         if axcl.AXCL_SUCC != ret:
@@ -49,3 +53,4 @@ class AxcliteDevice(AxcliteResource):
         if self._inited:
             axcl.rt.reset_device(self._device_id)
             self._inited = False
+            self._device_id = 0

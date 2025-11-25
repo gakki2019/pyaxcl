@@ -184,13 +184,18 @@ def main(device: int, input_file: str, codec: str, width: int, height: int, fps:
     # create video encoder object
     venc = create_venc_instance(device, 'h265', width, height, fps)
     axclite_resource_manager.register(venc)
-    dump_path = "/tmp/axcl"
+
+    if sys.platform.startswith('win'):
+        dump_path = os.path.dirname(os.path.abspath(input_file))
+    else:
+        dump_path = "/tmp/axcl"
+
     dump_file = "dump_transcode.{}".format('h265')
     venc.register_observer(VencObserver(dump_path if dump else None, dump_file if dump else None))
 
     """
-        The decoder only supports downscaling by chn1 or chn2 and cannot scale up. 
-        Therefore, if upscaling is required for the output, IVPS is needed; otherwise, the decoder can directly handle the downscaling. 
+        The decoder only supports downscaling by chn1 or chn2 and cannot scale up.
+        Therefore, if upscaling is required for the output, IVPS is needed; otherwise, the decoder can directly handle the downscaling.
         In this example, IVPS is always enabled to demonstrate how it is used.
     """
     ivps = create_ivps_instance(device, width, height)
@@ -256,11 +261,11 @@ if __name__ == '__main__':
     parser.add_argument('codec', choices=['h264', 'h265'], help='choose codec: h264, h265')
     parser.add_argument('--fps', type=int, default=30)
     parser.add_argument('--dump', type=int, default=0, help='dump encoded NAL stream, 0: no dump 1: dump')
-    parser.add_argument('-d', '--device', type=int, default=0, help='device id, 0 means auto select 1 from connected')
+    parser.add_argument('-d', '--device', type=int, default=0, help='device index from 0 to connected device num - 1')
     parser.add_argument('--json', type=str, default='/usr/bin/axcl/axcl.json', help='axcl.json path')
 
     args = parser.parse_args()
-    device_id = args.device
+    device_index = args.device
     json = args.json
     input_file = args.input
     codec = args.codec
@@ -272,8 +277,8 @@ if __name__ == '__main__':
     try:
         with axclite_system(json):
             # create device
-            device = AxcliteDevice(device_id)
-            if device.create():
+            device = AxcliteDevice()
+            if device.create(device_index):
                 # initialize video decoder, video encoder and ivps
                 ret = AxcliteMSys().init(AXCL_LITE_VDEC | AXCL_LITE_VENC | AXCL_LITE_IVPS)
                 if ret != axcl.AXCL_SUCC:

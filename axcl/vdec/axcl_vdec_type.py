@@ -152,7 +152,8 @@ class AX_VDEC_GRP_ATTR_T(BaseStructure):
         ("u32StreamBufSize", AX_U32),
         ("bSdkAutoFramePool", AX_BOOL),
         ("bSkipSdkStreamPool", AX_BOOL),
-        ("stStreamBufAddr", AX_MEMORY_ADDR_T)
+        ("stStreamBufAddr", AX_MEMORY_ADDR_T),
+        ("u32RefNum", AX_U32)
     ]
     field_aliases = {
         "enCodecType": "codec_type",
@@ -162,7 +163,8 @@ class AX_VDEC_GRP_ATTR_T(BaseStructure):
         "u32StreamBufSize": "stream_buf_size",
         "bSdkAutoFramePool": "sdk_auto_frame_pool",
         "bSkipSdkStreamPool": "skip_sdk_stream_pool",
-        "stStreamBufAddr": "stream_buf_addr"
+        "stStreamBufAddr": "stream_buf_addr",
+        "u32RefNum": "ref_num"
     }
 
 

@@ -62,6 +62,10 @@ AXCL_EXPORT axclError axclrtGetVersion(int32_t *major, int32_t *minor, int32_t *
     return ret;
 }
 
+AXCL_EXPORT const char *axclrtGetFullVersion() {
+    return "1.0.0";
+}
+
 AXCL_EXPORT const char *axclrtGetSocName() {
     return "AX650N";
 }

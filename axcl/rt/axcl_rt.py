@@ -66,6 +66,40 @@ def get_version() -> tuple[int, int, int, int]:
         return major.value, minor.value, patch.value, ret
 
 
+def get_full_version() -> str:
+    """
+    Get sdk full version
+
+    .. table::
+
+        ======================= =====================================================
+        **Language**            **Function Prototype**
+        ======================= =====================================================
+        **C**                   `const char* axclrtGetFullVersion();`
+        **python**              `version = axcl.rt.get_full_version()`
+        ======================= =====================================================
+
+    :returns: **version** (*str*) - sdk full version
+
+    **Example**
+
+        .. code-block:: python
+
+            version = axcl.rt.get_full_version()
+    """
+    version = None
+    try:
+        libaxcl_rt.axclrtGetFullVersion.restype = c_char_p
+        _version = libaxcl_rt.axclrtGetFullVersion()
+        if _version:
+            version = _version.decode('utf-8')
+    except Exception as e:
+        log_error(sys.exc_info())
+        log_error(traceback.format_exc())
+    finally:
+        return version
+
+
 def get_soc_name() -> str:
     """
     Get soc name

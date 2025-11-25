@@ -216,7 +216,7 @@ if __name__ == "__main__":
         "--device",
         type=int,
         default=0,
-        help="device id, if 0 means auto select 1 from connected",
+        help="device index from 0 to connected device num - 1",
     )
     parser.add_argument(
         "--json", type=str, default="/usr/bin/axcl/axcl.json", help="axcl.json path"
@@ -243,7 +243,7 @@ if __name__ == "__main__":
     print(f"        repeat: {repeat}")
 
     with axclite_system(json):
-        device = AxcliteDevice(device_index)
-        if device.create():
+        device = AxcliteDevice()
+        if device.create(device_index):
             main(vnpu, file, warmup, repeat)
             device.destroy()

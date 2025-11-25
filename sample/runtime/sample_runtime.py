@@ -25,12 +25,12 @@ from axclite.axclite_context import AxcliteContext
 from axclite.axclite_system import axclite_system
 
 
-def main(device_id):
-    _device = AxcliteDevice(device_id)
-    if not _device.create():
+def main(device_index):
+    device = AxcliteDevice()
+    if not device.create(device_index):
         return 1
 
-    device_id = _device.device_id
+    device_id = device.device_id
     print(f"device {device_id} is active")
 
     def worker(device_):
@@ -46,7 +46,7 @@ def main(device_id):
     t.start()
     t.join()
 
-    _device.destroy()
+    device.destroy()
     print(f"device {device_id} is inactive")
 
 
@@ -55,16 +55,15 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
     parser.add_argument('-d', '--device', type=int, default=0,
-                        help="device id, if 0 means auto select 1 from connected")
+                        help="device index from 0 to connected device num - 1")
     parser.add_argument('--json', type=str, default='/usr/bin/axcl/axcl.json', help="axcl.json path")
     args = parser.parse_args()
-    device = args.device
+    device_index = args.device
     json = args.json
-    print(f"cmd args: device id={device}, json={json}")
 
     try:
         with axclite_system(json):
-            main(device)
+            main(device_index)
     except:
         print(sys.exc_info())
         print(traceback.format_exc())

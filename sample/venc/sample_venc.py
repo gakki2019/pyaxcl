@@ -56,7 +56,11 @@ def main(device: int, image_file: str, codec: str, width: int, height: int, fps:
         print(f"device {device:02x}: no image in {image_file}")
         return
 
-    dump_path = "/tmp/axcl"
+    if sys.platform.startswith('win'):
+        dump_path = os.path.dirname(os.path.abspath(image_file))
+    else:
+        dump_path = "/tmp/axcl"
+
     dump_file = "dump_encoded.{}".format(codec)
     observer = VencObserver(dump_path, dump_file)
     encoder = AxcliteVenc()
@@ -188,11 +192,11 @@ if __name__ == '__main__':
     parser.add_argument('codec', choices=['h264', 'h265'], help='choose codec: h264, h265')
     parser.add_argument('--fps', type=int, default=30)
     parser.add_argument('--dump', type=int, default=0, help='dump encoded NAL stream, 0: no dump 1: dump')
-    parser.add_argument('-d', '--device', type=int, default=0, help='device id, 0 means auto select 1 from connected')
+    parser.add_argument('-d', '--device', type=int, default=0, help='device index from 0 to connected device num - 1')
     parser.add_argument('--json', type=str, default='/usr/bin/axcl/axcl.json', help='axcl.json path')
 
     args = parser.parse_args()
-    device_id = args.device
+    device_index = args.device
     json = args.json
     input_file = args.input
     codec = args.codec
@@ -208,8 +212,8 @@ if __name__ == '__main__':
     try:
         with axclite_system(json):
             # create device
-            device = AxcliteDevice(device_id)
-            if device.create():
+            device = AxcliteDevice()
+            if device.create(device_index):
                 # initialize video decoder and sys module
                 ret = AxcliteMSys().init(AXCL_LITE_VENC)
                 if ret != axcl.AXCL_SUCC:

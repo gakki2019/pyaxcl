@@ -1821,7 +1821,7 @@ def mau_matmul(src: dict, dst: dict, ctrl: dict, engine: int, instant: bool) -> 
         ======================= =====================================================
         **Language**            **Function Prototype**
         ======================= =====================================================
-        **C**                   `AX_S32 AXCL_IVE_CSCAXCL_IVE_MAU_MatMul(AX_IVE_HANDLE *pIveHandle, AX_IVE_MAU_MATMUL_INPUT_T *pstSrc, AX_IVE_MAU_MATMUL_OUTPUT_T *pstDst, AX_IVE_MAU_MATMUL_CTRL_T *pstMatMulCtrl, AX_IVE_ENGINE_E enEngine, AX_BOOL bInstant);`
+        **C**                   `AX_S32 AXCL_IVE_MAU_MatMul(AX_IVE_HANDLE *pIveHandle, AX_IVE_MAU_MATMUL_INPUT_T *pstSrc, AX_IVE_MAU_MATMUL_OUTPUT_T *pstDst, AX_IVE_MAU_MATMUL_CTRL_T *pstMatMulCtrl, AX_IVE_ENGINE_E enEngine, AX_BOOL bInstant);`
         **python**              `handle, ret = mau_matmul(src, dst, ctrl, engine, instant)`
         ======================= =====================================================
 

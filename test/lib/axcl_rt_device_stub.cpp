@@ -54,13 +54,25 @@ AXCL_EXPORT axclError axclrtSynchronizeDevice() {
     IMPLEMENT_SERIALIZE();
 }
 
-AXCL_EXPORT axclError axclrtGetDeviceUtilizationRate(int32_t deviceId, axclrtUtilizationInfo *utilizationInfo) {
+AXCL_EXPORT axclError axclrtGetDeviceProperties(int32_t deviceId, axclrtDeviceProperties *properties) {
     SERILAIZER()->input()->serialize(deviceId);
-    utilizationInfo->cpuUtilization = initialize_random<int32_t>();
-    utilizationInfo->npuUtilization = initialize_random<int32_t>();
-    utilizationInfo->memUtilization = initialize_random<int32_t>();
-    utilizationInfo->extUtilization = nullptr;
+    memset(properties, 0, sizeof(axclrtDeviceProperties));
+    strcpy(properties->swVersion, "1.0.0");
+    properties->uid = initialize_random<uint64_t>();
+    properties->pciDomain = initialize_random<uint32_t>();
+    properties->pciBusID = initialize_random<uint32_t>();
+    properties->pciDeviceID = initialize_random<uint32_t>();
+    properties->temperature = initialize_random<int32_t>();
+    properties->totalMemSize = initialize_random<int32_t>();
+    properties->freeMemSize = initialize_random<int32_t>();
+    properties->totalCmmSize = initialize_random<int32_t>();
+    properties->freeCmmSize = initialize_random<int32_t>();
+    properties->cpuLoading = initialize_random<int32_t>();
+    properties->npuLoading = initialize_random<int32_t>();
+    for (size_t i = 0; i < sizeof(properties->reserved) / sizeof(properties->reserved[0]); ++i) {
+        properties->reserved[i] = initialize_random<int32_t>();
+    }
     axclError ret = initialize_random<axclError>();
-    SERILAIZER()->output()->serialize(ret, *utilizationInfo);
+    SERILAIZER()->output()->serialize(ret, *properties);
     return ret;
 }

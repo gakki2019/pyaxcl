@@ -1149,7 +1149,7 @@ class AX_OVERLAY_T(BaseStructure):
             "format": :class:`AX_IMG_FORMAT_E <axcl.ax_global_type.AX_IMG_FORMAT_E>`,
             "phy_addr": [int],
             "compress_info": :class:`AX_FRAME_COMPRESS_INFO_T <axcl.ax_global_type.AX_FRAME_COMPRESS_INFO_T>`,
-            "alpha": :class:`ctypes.c_ubyte`,
+            "alpha": int,
             "offset": :class:`AX_POINT_T <axcl.ax_global_type.AX_POINT_T>`,
             "color_key": :class:`AX_COLORKEY_T <axcl.ax_global_type.AX_COLORKEY_T>`,
             "bit_color": :class:`AX_BITCOLOR_T <axcl.ax_global_type.AX_BITCOLOR_T>`

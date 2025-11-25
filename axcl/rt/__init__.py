@@ -19,7 +19,7 @@ from axcl.rt.axcl_rt_device import get_device
 from axcl.rt.axcl_rt_device import get_device_count
 from axcl.rt.axcl_rt_device import get_device_list
 from axcl.rt.axcl_rt_device import synchronize_device
-from axcl.rt.axcl_rt_device import get_device_utilization_rate
+from axcl.rt.axcl_rt_device import get_device_properties
 
 from axcl.rt.axcl_rt_context import create_context
 from axcl.rt.axcl_rt_context import destroy_context
@@ -113,6 +113,3 @@ from axcl.rt.axcl_rt_engine_type import AXCL_VNPU_DISABLE
 from axcl.rt.axcl_rt_engine_type import AXCL_VNPU_ENABLE
 from axcl.rt.axcl_rt_engine_type import AXCL_VNPU_BIG_LITTLE
 from axcl.rt.axcl_rt_engine_type import AXCL_VNPU_LITTLE_BIG
-
-
-
