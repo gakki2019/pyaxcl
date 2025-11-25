@@ -23,7 +23,7 @@ if platform.architecture()[0] != "64bit":
 
 def get_sdk_version():
     v = "0.1.0"
-    version_mak_path = os.path.abspath(os.path.join(os.getcwd(), "version.mak"))
+    version_mak_path = os.path.abspath(os.path.join(os.getcwd(), "../build/version.mak"))
     if os.path.exists(version_mak_path):
         with open(version_mak_path, "r") as f:
             content = f.read()

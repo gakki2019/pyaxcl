@@ -10,7 +10,7 @@
 #
 # ******************************************************************************
 
-from ctypes import Structure, c_void_p, c_uint32, c_int32
+from ctypes import Structure, c_void_p, c_uint32, c_int32, c_uint64, c_char
 import os
 import sys
 
@@ -18,31 +18,58 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(BASE_DIR)
 
 from axcl.axcl_base import *
+from axcl.utils.axcl_basestructure import *
 
-
-class axclrtUtilizationInfo(Structure):
+class axclrtDeviceProperties(BaseStructure):
     """
     .. parsed-literal::
 
-        dict_utilization_nfo = {
-            "cpu_utilization": int,
-            "npu_utilization": int,
-            "mem_utilization": int,
-            "ext_utilization": int
+        dict_device_properties = {
+            "sw_version": [int],
+            "uid": int,
+            "pci_domain": int,
+            "pci_bus_id": int,
+            "pci_device_id": int,
+            "temperature": int,
+            "total_mem_size": int,
+            "free_mem_size": int,
+            "total_cmm_size": int,
+            "free_cmm_size": int,
+            "cpu_loading": int,
+            "npu_loading": int,
+            "reserved": [int]
         }
     """
     _fields_ = [
-        ("cpuUtilization", c_int32),
-        ("npuUtilization", c_int32),
-        ("memUtilization", c_int32),
-        ("extUtilization", c_void_p)
+        ("swVersion", c_uint8 * 64),
+        ("uid", c_uint64),
+        ("pciDomain", c_uint32),
+        ("pciBusID", c_uint32),
+        ("pciDeviceID", c_uint32),
+        ("temperature", c_int32),
+        ("totalMemSize", c_uint32),
+        ("freeMemSize", c_uint32),
+        ("totalCmmSize", c_uint32),
+        ("freeCmmSize", c_uint32),
+        ("cpuLoading", c_uint32),
+        ("npuLoading", c_uint32),
+        ("reserved", c_uint32 * 32)
     ]
 
     field_aliases = {
-        "cpuUtilization": "cpu_utilization",
-        "npuUtilization": "npu_utilization",
-        "memUtilization": "mem_utilization",
-        "extUtilization": "ext_utilization"
+        "swVersion": "sw_version",
+        "uid": "uid",
+        "pciDomain": "pci_domain",
+        "pciBusID": "pci_bus_id",
+        "pciDeviceID": "pci_device_id",
+        "temperature": "temperature",
+        "cpuLoading": "cpu_loading",
+        "npuLoading": "npu_loading",
+        "totalMemSize": "total_mem_size",
+        "freeMemSize": "free_mem_size",
+        "totalCmmSize": "total_cmm_size",
+        "freeCmmSize": "free_cmm_size",
+        "reserved": "reserved"
     }
 
 
@@ -100,4 +127,3 @@ AXCL_MEMCPY_DEVICE_TO_HOST = 2
 AXCL_MEMCPY_DEVICE_TO_DEVICE = 3
 AXCL_MEMCPY_HOST_PHY_TO_DEVICE = 4
 AXCL_MEMCPY_DEVICE_TO_HOST_PHY = 5
-

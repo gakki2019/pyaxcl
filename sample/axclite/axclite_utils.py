@@ -12,6 +12,7 @@
 import ctypes
 import sys
 import traceback
+import platform
 
 import axcl
 
@@ -26,7 +27,11 @@ def axclite_align_down(x, align):
 
 def axclite_memcmp(s1: ctypes.c_void_p, s2: ctypes.c_void_p, n: ctypes.c_size_t) -> int:
     try:
-        libc = ctypes.CDLL(None)
+        if platform.system() == 'Windows':
+            libc = ctypes.CDLL('msvcrt.dll')
+        else:
+            libc = ctypes.CDLL(None)
+
         libc.memcmp.argtypes = [ctypes.c_void_p, ctypes.c_void_p, ctypes.c_size_t]
         libc.memcmp.restype = ctypes.c_int
         ret = libc.memcmp(s1, s2, n)

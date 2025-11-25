@@ -688,7 +688,9 @@ class AX_IVPS_DEWARP_ATTR_T(BaseStructure):
             "dst_stride": int,
             "image_format": :class:`AX_IMG_FORMAT_E <axcl.ax_global_type.AX_IMG_FORMAT_E>`,
             "enable_perspective": bool,
-            "perspective_attr": :class:`AX_IVPS_PERSPECTIVE_ATTR_T <axcl.ivps.axcl_ivps_type.AX_IVPS_PERSPECTIVE_ATTR_T>`
+            "perspective_attr": :class:`AX_IVPS_PERSPECTIVE_ATTR_T <axcl.ivps.axcl_ivps_type.AX_IVPS_PERSPECTIVE_ATTR_T>`,
+            "dewarp_type": :class:`AX_IVPS_DEWARP_TYPE_E <axcl.ivps.axcl_ivps_type.AX_IVPS_DEWARP_TYPE_E>`,
+            "map_user_attr": :class:`AX_IVPS_MAP_USER_ATTR_T <axcl.ivps.axcl_ivps_type.AX_IVPS_MAP_USER_ATTR_T>`
         }
     """
     _fields_ = [
@@ -699,7 +701,9 @@ class AX_IVPS_DEWARP_ATTR_T(BaseStructure):
         ("nDstStride", AX_U32),                  # RW; range: [128, 8192]; 128 pixels aligned; format of output picture
         ("eImgFormat", AX_IMG_FORMAT_E),         # RW; format of output picture; only support NV12
         ("bPerspective", AX_BOOL),               # Enable perspective
-        ("tPerspectiveAttr", AX_IVPS_PERSPECTIVE_ATTR_T)  # Perspective attributes
+        ("tPerspectiveAttr", AX_IVPS_PERSPECTIVE_ATTR_T),  # Perspective attributes
+        ("eDewarpType", AX_IVPS_DEWARP_TYPE_E),
+        ("tMapUserAttr", AX_IVPS_MAP_USER_ATTR_T)
     ]
     field_aliases = {
         "bCrop": "enable_crop",
@@ -709,7 +713,9 @@ class AX_IVPS_DEWARP_ATTR_T(BaseStructure):
         "nDstStride": "dst_stride",
         "eImgFormat": "image_format",
         "bPerspective": "enable_perspective",
-        "tPerspectiveAttr": "perspective_attr"
+        "tPerspectiveAttr": "perspective_attr",
+        "eDewarpType": "dewarp_type",
+        "tMapUserAttr": "map_user_attr"
     }
 
 class AX_IVPS_ALPHA_LUT_T(BaseStructure):

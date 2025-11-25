@@ -61,13 +61,11 @@ class TestRtDevice:
         output_args = serialize_ctypes_args(axclError(ret))
         assert 0 == check_input_output(None, output_args)
 
-    def test_get_device_utilization_rate(self):
+    def test_get_device_proprties(self):
         device_id = create_random_int(1, AXCL_MAX_DEVICE_COUNT)
-        cpuUtilization, npuUtilization, memUtilization, ret = axcl.rt.get_device_utilization_rate(device_id)
-        c_utilization_info = axclrtUtilizationInfo()
-        c_utilization_info.cpuUtilization = cpuUtilization
-        c_utilization_info.npuUtilization = npuUtilization
-        c_utilization_info.memUtilization = memUtilization
+        d_properties, ret = axcl.rt.get_device_properties(device_id)
+        c_properties = axclrtDeviceProperties()
+        c_properties.dict2struct(d_properties)
         inputs_args = serialize_ctypes_args(c_int32(device_id))
-        output_args = serialize_ctypes_args(axclError(ret), c_utilization_info)
+        output_args = serialize_ctypes_args(axclError(ret), c_properties)
         assert 0 == check_input_output(inputs_args, output_args)

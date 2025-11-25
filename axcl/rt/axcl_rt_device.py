@@ -226,38 +226,35 @@ def synchronize_device() -> int:
     finally:
         return ret
 
-
-def get_device_utilization_rate(device_id: int) -> tuple[int, int, int, int]:
+def get_device_properties(device_id: int) -> tuple[dict, int]:
     """
-    Get device utilization rate
+    Get device properties
 
     .. table::
 
         ======================= =====================================================
         **Language**            **Function Prototype**
         ======================= =====================================================
-        **C**                   `axclError axclrtGetDeviceUtilizationRate(int32_t deviceId, axclrtUtilizationInfo *utilizationInfo);`
-        **python**              `cpu_utilization, npu_utilization, mem_utilization, ret = axcl.rt.get_device_utilization_rate(device_id)`
+        **C**                   `axclError axclrtGetDeviceProperties(int32_t deviceId, axclrtDeviceProperties *properties);`
+        **python**              `properties, ret = axcl.rt.get_device_properties(device_id)`
         ======================= =====================================================
 
     :param int device_id: device id.
-    :returns: tuple[int, int, int, int]
+    :returns: tuple[int, dict]
 
-        - **cpu_utilization** (*int*) - cpu utilization
-        - **npu_utilization** (*int*) - npu utilization
-        - **mem_utilization** (*int*) - memory utilization
+        - **properties** (*dict*) - :class:`axclrtDeviceProperties <axcl.rt.axcl_rt_type.axclrtDeviceProperties>`
         - **ret** (*int*) - 0 indicates success, otherwise failure
     """
     ret = -1
-    utilizationInfo = axclrtUtilizationInfo(0)
+    properties = axclrtDeviceProperties()
     try:
-        libaxcl_rt.axclrtGetDeviceUtilizationRate.restype = axclError
-        libaxcl_rt.axclrtGetDeviceUtilizationRate.argtypes=[c_int32, POINTER(axclrtUtilizationInfo)]
+        libaxcl_rt.axclrtGetDeviceProperties.restype = axclError
+        libaxcl_rt.axclrtGetDeviceProperties.argtypes=[c_int32, POINTER(axclrtDeviceProperties)]
         deviceId = c_int32(device_id)
 
-        ret = libaxcl_rt.axclrtGetDeviceUtilizationRate(deviceId, byref(utilizationInfo))
+        ret = libaxcl_rt.axclrtGetDeviceProperties(deviceId, byref(properties))
     except:
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
     finally:
-        return utilizationInfo.cpuUtilization, utilizationInfo.npuUtilization, utilizationInfo.memUtilization, ret
+        return properties.struct2dict(), ret

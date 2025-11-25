@@ -530,7 +530,7 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
     parser.add_argument('-d', '--device', type=int, default=0,
-                        help="device id, if 0 means auto select 1 from connected")
+                        help="device index from 0 to connected device num - 1")
     parser.add_argument('--json', type=str, default='/usr/bin/axcl/axcl.json', help="axcl.json path")
     parser.add_argument('-c', '--case', type=str, default='crop_resize', help="case string, option: crop_resize/csc")
     parser.add_argument('-i', '--input', type=str, default='./data/1920x1080.nv12', help="input file")
@@ -542,7 +542,7 @@ if __name__ == '__main__':
     parser.add_argument('--width', type=int, default=1920, help="input file resolution width")
     parser.add_argument('--height', type=int, default=1080, help="input file resolution height")
     args = parser.parse_args()
-    device_id = args.device
+    device_index = args.device
     json = args.json
     case_no = args.case
     src_file = args.input
@@ -554,12 +554,10 @@ if __name__ == '__main__':
     engine = args.engine
     api_version = args.version
 
-    print(f"cmd args: device id={device_id}, json={json}")
-
     try:
         with axclite_system(json):
-            device = AxcliteDevice(device_id)
-            if device.create():
+            device = AxcliteDevice()
+            if device.create(device_index):
                 main(device.device_id, case_no, src_file, dst_path, width, height, frame_src_type, frame_dst_type, engine, api_version)
                 device.destroy()
     except:
