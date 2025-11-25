@@ -55,10 +55,10 @@ def create_context(device_id: int) -> tuple[int, int]:
 
         ret = libaxcl_rt.axclrtCreateContext(byref(context), deviceId)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return context.value, ret
+    return context.value, ret
 
 
 def destroy_context(context: int) -> int:
@@ -85,10 +85,10 @@ def destroy_context(context: int) -> int:
             c_context = c_void_p(context)
             ret = libaxcl_rt.axclrtDestroyContext(c_context)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def set_current_context(context: int) -> int:
@@ -115,10 +115,10 @@ def set_current_context(context: int) -> int:
             c_context = c_void_p(context)
             ret = libaxcl_rt.axclrtSetCurrentContext(c_context)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def get_current_context() -> tuple[int, int]:
@@ -146,10 +146,10 @@ def get_current_context() -> tuple[int, int]:
         libaxcl_rt.axclrtGetCurrentContext.argtypes=[POINTER(c_void_p)]
         ret = libaxcl_rt.axclrtGetCurrentContext(byref(context))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return context.value, ret
+    return context.value, ret
 
 
 def get_default_context(device_id: int) -> tuple[int, int]:
@@ -180,7 +180,7 @@ def get_default_context(device_id: int) -> tuple[int, int]:
         deviceId = c_int32(device_id)
         ret = libaxcl_rt.axclrtGetDefaultContext(byref(context), deviceId)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return context.value, ret
+    return context.value, ret

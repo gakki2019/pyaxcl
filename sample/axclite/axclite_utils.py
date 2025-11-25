@@ -38,8 +38,7 @@ def axclite_memcmp(s1: ctypes.c_void_p, s2: ctypes.c_void_p, n: ctypes.c_size_t)
     except:
         print(sys.exc_info())
         print(traceback.format_exc())
-    finally:
-        return ret
+        return -1
 
 
 def axclite_get_stride(width, type):

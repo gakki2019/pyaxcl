@@ -60,10 +60,10 @@ def get_version() -> tuple[int, int, int, int]:
 
         ret = libaxcl_rt.axclrtGetVersion(byref(major),byref(minor),byref(patch))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return major.value, minor.value, patch.value, ret
+    return major.value, minor.value, patch.value, ret
 
 
 def get_full_version() -> str:
@@ -87,17 +87,17 @@ def get_full_version() -> str:
 
             version = axcl.rt.get_full_version()
     """
-    version = None
+    version = ""
     try:
         libaxcl_rt.axclrtGetFullVersion.restype = c_char_p
         _version = libaxcl_rt.axclrtGetFullVersion()
         if _version:
             version = _version.decode('utf-8')
-    except Exception as e:
+    except:
+        version = ""
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return version
+    return version
 
 
 def get_soc_name() -> str:
@@ -121,14 +121,14 @@ def get_soc_name() -> str:
 
             name = axcl.rt.get_soc_name()
     """
-    name = None
+    name = ""
     try:
         libaxcl_rt.axclrtGetSocName.restype = c_char_p
         _name = libaxcl_rt.axclrtGetSocName()
         if _name:
             name = _name.decode('utf-8')
     except:
+        name = ""
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return name
+    return name

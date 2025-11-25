@@ -120,7 +120,7 @@ def check_input_output(inputs_args: bytes, output_args: bytes):
         #    hex_str = ' '.join(f'{b:02x}' for b in bytes_data)
         #    print(f"inputs_args = {inputs_args}, inputs_len = {inputs_len}, inputs_ptr = {inputs_ptr} bytes_data = {bytes_data}")
     except:
+        ret = -1
         print(sys.exc_info())
         print(traceback.format_exc())
-    finally:
-        return ret
+    return ret

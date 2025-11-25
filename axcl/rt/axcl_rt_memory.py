@@ -53,10 +53,10 @@ def malloc(size: int, policy: int) -> tuple[int, int]:
 
         ret = libaxcl_rt.axclrtMalloc(byref(devPtr), c_size, c_policy)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return devPtr.value, ret
+    return devPtr.value, ret
 
 
 def malloc_cached(size: int, policy: int) -> tuple[int, int]:
@@ -89,10 +89,10 @@ def malloc_cached(size: int, policy: int) -> tuple[int, int]:
 
         ret = libaxcl_rt.axclrtMallocCached(byref(devPtr), c_size, c_policy)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return devPtr.value, ret
+    return devPtr.value, ret
 
 
 def free(dev_ptr: int) -> int:
@@ -119,10 +119,10 @@ def free(dev_ptr: int) -> int:
             c_dev_ptr = c_void_p(dev_ptr)
             ret = libaxcl_rt.axclrtFree(c_dev_ptr)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def mem_flush(dev_ptr: int, size: int) -> int:
@@ -152,10 +152,10 @@ def mem_flush(dev_ptr: int, size: int) -> int:
             c_dev_ptr = c_void_p(dev_ptr)
             ret = libaxcl_rt.axclrtMemFlush(c_dev_ptr, c_size)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def mem_invalidate(dev_ptr: int, size: int) -> int:
@@ -185,10 +185,10 @@ def mem_invalidate(dev_ptr: int, size: int) -> int:
             c_dev_ptr = c_void_p(dev_ptr)
             ret = libaxcl_rt.axclrtMemInvalidate(c_dev_ptr, c_size)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def malloc_host(size: int) -> tuple[int, int]:
@@ -219,10 +219,10 @@ def malloc_host(size: int) -> tuple[int, int]:
 
         ret = libaxcl_rt.axclrtMallocHost(byref(hostPtr), c_size)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return hostPtr.value, ret
+    return hostPtr.value, ret
 
 
 def free_host(host_ptr: int) -> int:
@@ -250,10 +250,10 @@ def free_host(host_ptr: int) -> int:
             c_host_ptr = c_void_p(host_ptr)
             ret = libaxcl_rt.axclrtFreeHost(host_ptr)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def memset(dev_ptr: int, value: int, count: int) -> int:
@@ -284,10 +284,10 @@ def memset(dev_ptr: int, value: int, count: int) -> int:
             c_dev_ptr = c_void_p(dev_ptr)
             ret = libaxcl_rt.axclrtMemset(c_dev_ptr, c_value, c_count)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def memcpy(dst_ptr: int, src_ptr: int, count: int, kind: int) -> int:
@@ -320,10 +320,10 @@ def memcpy(dst_ptr: int, src_ptr: int, count: int, kind: int) -> int:
             c_src_ptr = c_void_p(src_ptr)
             ret = libaxcl_rt.axclrtMemcpy(c_dst_ptr, c_src_ptr, c_count, c_kind)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def memcmp(dev_ptr1: int, dev_ptr2: int, count: int) -> int:
@@ -354,7 +354,7 @@ def memcmp(dev_ptr1: int, dev_ptr2: int, count: int) -> int:
             c_dev_ptr2 = c_void_p(dev_ptr2)
             ret = libaxcl_rt.axclrtMemcmp(c_dev_ptr1, c_dev_ptr2, c_count)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret

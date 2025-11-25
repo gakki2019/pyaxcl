@@ -44,10 +44,10 @@ def init() -> int:
         libaxcl_sys.AXCL_SYS_Init.restype = AX_S32
         ret = libaxcl_sys.AXCL_SYS_Init()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def deinit() -> int:
@@ -70,10 +70,10 @@ def deinit() -> int:
         libaxcl_sys.AXCL_SYS_Deinit.restype = AX_S32
         ret = libaxcl_sys.AXCL_SYS_Deinit()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def mem_alloc(size: int, align: int, token: str) -> tuple[int, int, int]:
@@ -114,10 +114,10 @@ def mem_alloc(size: int, align: int, token: str) -> tuple[int, int, int]:
 
         ret = libaxcl_sys.AXCL_SYS_MemAlloc(byref(phy_addr), byref(vir_addr), c_size, c_align, c_token)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return phy_addr.value, vir_addr.value, ret
+    return phy_addr.value, vir_addr.value, ret
 
 
 def mem_alloc_cached(size: int, align: int, token: str) -> tuple[int, int, int]:
@@ -158,10 +158,10 @@ def mem_alloc_cached(size: int, align: int, token: str) -> tuple[int, int, int]:
 
         ret = libaxcl_sys.AXCL_SYS_MemAllocCached(byref(phy_addr), byref(vir_addr), c_size, c_align, c_token)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return phy_addr.value, vir_addr.value, ret
+    return phy_addr.value, vir_addr.value, ret
 
 
 def mem_free(phy_addr: int, vir_addr: int) -> int:
@@ -190,10 +190,10 @@ def mem_free(phy_addr: int, vir_addr: int) -> int:
 
         ret = libaxcl_sys.AXCL_SYS_MemFree(c_phy_addr, c_vir_addr)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def mmap(phy_addr: int, size: int) -> int:
@@ -213,7 +213,7 @@ def mmap(phy_addr: int, size: int) -> int:
     :param int size: memory size
     :returns: **vir_addr** (*int*) - virtual address
     """
-    vir_addr = c_void_p(0)
+    vir_addr = 0
     try:
         libaxcl_sys.AXCL_SYS_Mmap.restype = c_void_p
         libaxcl_sys.AXCL_SYS_Mmap.argtypes=[AX_U64, AX_U32]
@@ -222,10 +222,10 @@ def mmap(phy_addr: int, size: int) -> int:
 
         vir_addr = libaxcl_sys.AXCL_SYS_Mmap(c_phy_addr, c_size)
     except:
+        vir_addr = 0
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return vir_addr
+    return vir_addr
 
 
 def mmap_cache(phy_addr: int, size: int) -> int:
@@ -245,7 +245,7 @@ def mmap_cache(phy_addr: int, size: int) -> int:
     :param int size: memorysize
     :returns: **vir_addr** (*int*) - virtual address
     """
-    vir_addr = None
+    vir_addr = 0
     try:
         libaxcl_sys.AXCL_SYS_MmapCache.restype = c_void_p
         libaxcl_sys.AXCL_SYS_MmapCache.argtypes=[AX_U64, AX_U32]
@@ -254,10 +254,10 @@ def mmap_cache(phy_addr: int, size: int) -> int:
 
         vir_addr = libaxcl_sys.AXCL_SYS_MmapCache(c_phy_addr, c_size)
     except:
+        vir_addr = 0
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return vir_addr
+    return vir_addr
 
 
 def mmap_fast(phy_addr: int, size: int) -> int:
@@ -277,7 +277,7 @@ def mmap_fast(phy_addr: int, size: int) -> int:
     :param int size: memory size
     :returns: **vir_addr** (*int*) - virtual address
     """
-    vir_addr = None
+    vir_addr = 0
     try:
         libaxcl_sys.AXCL_SYS_MmapFast.restype = c_void_p
         libaxcl_sys.AXCL_SYS_MmapFast.argtypes=[AX_U64, AX_U32]
@@ -286,10 +286,10 @@ def mmap_fast(phy_addr: int, size: int) -> int:
 
         vir_addr = libaxcl_sys.AXCL_SYS_MmapFast(c_phy_addr, c_size)
     except:
+        vir_addr = 0
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return vir_addr
+    return vir_addr
 
 
 def mmap_cache_fast(phy_addr: int, size: int) -> int:
@@ -309,7 +309,7 @@ def mmap_cache_fast(phy_addr: int, size: int) -> int:
     :param int size: memory size
     :returns: **vir_addr** (*int*) - virtual address
     """
-    vir_addr = None
+    vir_addr = 0
     try:
         libaxcl_sys.AXCL_SYS_MmapCacheFast.restype = c_void_p
         libaxcl_sys.AXCL_SYS_MmapCacheFast.argtypes=[AX_U64, AX_U32]
@@ -318,10 +318,10 @@ def mmap_cache_fast(phy_addr: int, size: int) -> int:
 
         vir_addr = libaxcl_sys.AXCL_SYS_MmapCacheFast(c_phy_addr, c_size)
     except:
+        vir_addr = 0
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return vir_addr
+    return vir_addr
 
 
 def munmap(vir_addr: int, size: int) -> int:
@@ -350,10 +350,10 @@ def munmap(vir_addr: int, size: int) -> int:
             c_vir_addr = c_void_p(vir_addr)
             ret = libaxcl_sys.AXCL_SYS_Munmap(c_vir_addr, c_size)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def mflush_cache(phy_addr: int, vir_addr: int, size: int) -> int:
@@ -384,10 +384,10 @@ def mflush_cache(phy_addr: int, vir_addr: int, size: int) -> int:
             c_vir_addr = c_void_p(vir_addr)
             ret = libaxcl_sys.AXCL_SYS_MflushCache(c_phy_addr, c_vir_addr, c_size)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def minvalidate_cache(phy_addr: int, vir_addr: int, size: int) -> int:
@@ -418,10 +418,10 @@ def minvalidate_cache(phy_addr: int, vir_addr: int, size: int) -> int:
             c_vir_addr = c_void_p(vir_addr)
             ret = libaxcl_sys.AXCL_SYS_MinvalidateCache(c_phy_addr, c_vir_addr, c_size)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def mem_get_block_info_by_phy(phy_addr: int) -> tuple[int, int, int, int]:
@@ -456,10 +456,10 @@ def mem_get_block_info_by_phy(phy_addr: int) -> tuple[int, int, int, int]:
 
         ret = libaxcl_sys.AXCL_SYS_MemGetBlockInfoByPhy(c_phy_addr, byref(mem_type), byref(vir_addr), byref(block_size))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return mem_type.value, vir_addr.value, block_size.value, ret
+    return mem_type.value, vir_addr.value, block_size.value, ret
 
 
 def mem_get_block_info_by_virt(vir_addr: int) -> tuple[int, int, int]:
@@ -492,10 +492,10 @@ def mem_get_block_info_by_virt(vir_addr: int) -> tuple[int, int, int]:
             c_vir_addr = c_void_p(vir_addr)
             ret = libaxcl_sys.AXCL_SYS_MemGetBlockInfoByVirt(c_vir_addr, byref(phy_addr), byref(mem_type))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return phy_addr.value, mem_type.value, ret
+    return phy_addr.value, mem_type.value, ret
 
 
 def mem_get_partition_info() -> tuple[list, int]:
@@ -534,10 +534,10 @@ def mem_get_partition_info() -> tuple[list, int]:
                 }
                 cmm_part_info.append(part_info)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return cmm_part_info, ret
+    return cmm_part_info, ret
 
 
 def mem_set_config(mod_info: dict, partition_name: str) -> int:
@@ -574,10 +574,10 @@ def mem_set_config(mod_info: dict, partition_name: str) -> int:
         ret = libaxcl_sys.AXCL_SYS_MemSetConfig(byref(c_mod_info), c_partition_name)
 
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def mem_get_config(mod_info: dict) -> tuple[str, int]:
@@ -614,10 +614,10 @@ def mem_get_config(mod_info: dict) -> tuple[str, int]:
         if ret == 0:
             partition_name = c_partition_name.value.decode('utf-8')
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return partition_name, ret
+    return partition_name, ret
 
 
 def mem_query_status() -> tuple[dict, int]:
@@ -660,10 +660,10 @@ def mem_query_status() -> tuple[dict, int]:
                 cmm_status['partition'].append(part_info)
 
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return cmm_status, ret
+    return cmm_status, ret
 
 
 def link(src_mod_info: dict, dst_mod_info: dict) -> int:
@@ -700,10 +700,10 @@ def link(src_mod_info: dict, dst_mod_info: dict) -> int:
 
             ret = libaxcl_sys.AXCL_SYS_Link(byref(src), byref(dst))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def unlink(src_mod_info: dict, dst_mod_info: dict) -> int:
@@ -740,10 +740,10 @@ def unlink(src_mod_info: dict, dst_mod_info: dict) -> int:
 
             ret = libaxcl_sys.AXCL_SYS_UnLink(byref(src), byref(dst))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def get_link_by_dest(dst_mod_info: dict) -> tuple[dict, int]:
@@ -787,10 +787,10 @@ def get_link_by_dest(dst_mod_info: dict) -> tuple[dict, int]:
                 src_mod_info['grp_id'] = src.s32GrpId
                 src_mod_info['chn_id'] = src.s32ChnId
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return src_mod_info, ret
+    return src_mod_info, ret
 
 
 def get_link_by_src(src_mod_info: dict) -> tuple[list, int]:
@@ -829,10 +829,10 @@ def get_link_by_src(src_mod_info: dict) -> tuple[list, int]:
                 for i in range(dst.u32DestNum):
                     dst_link.append({'mod_id': dst.astDestMod[i].enModId, 'grp_id': dst.astDestMod[i].s32GrpId, 'chn_id': dst.astDestMod[i].s32ChnId})
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return dst_link, ret
+    return dst_link, ret
 
 
 def get_cur_pts() -> tuple[int, int]:
@@ -861,10 +861,10 @@ def get_cur_pts() -> tuple[int, int]:
 
         ret = libaxcl_sys.AXCL_SYS_GetCurPTS(byref(cur_pts))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return cur_pts.value, ret
+    return cur_pts.value, ret
 
 
 def init_pts_base(pts_base: int) -> int:
@@ -891,10 +891,10 @@ def init_pts_base(pts_base: int) -> int:
 
         ret = libaxcl_sys.AXCL_SYS_InitPTSBase(c_pts_base)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def sync_pts(pts_base: int) -> int:
@@ -921,10 +921,10 @@ def sync_pts(pts_base: int) -> int:
 
         ret = libaxcl_sys.AXCL_SYS_SyncPTS(c_pts_base)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def get_chip_type() -> int:
@@ -948,7 +948,7 @@ def get_chip_type() -> int:
 
         chip_type = libaxcl_sys.AXCL_SYS_GetChipType()
     except:
+        chip_type = 0
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return chip_type
+    return chip_type

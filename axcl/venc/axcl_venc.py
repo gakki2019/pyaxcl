@@ -57,8 +57,8 @@ def init(mod_attr: dict) -> int:
         ret = axcl.venc.init(mode_attr)
     """
     ret = -1
-    c_mode_attr = AX_VENC_MOD_ATTR_T()
     try:
+        c_mode_attr = AX_VENC_MOD_ATTR_T()
         if mod_attr:
             c_mode_attr.dict2struct(mod_attr)
 
@@ -66,10 +66,10 @@ def init(mod_attr: dict) -> int:
         libaxcl_venc.AXCL_VENC_Init.argtypes = [POINTER(AX_VENC_MOD_ATTR_T)]
         ret = libaxcl_venc.AXCL_VENC_Init(byref(c_mode_attr))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def deinit() -> int:
@@ -93,10 +93,10 @@ def deinit() -> int:
         libaxcl_venc.AXCL_VENC_Deinit.argtypes = None
         ret = libaxcl_venc.AXCL_VENC_Deinit()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def set_default_codec_attribute(attr: dict):
@@ -178,8 +178,8 @@ def create_chn(chn: int, attr: dict) -> int:
     """
 
     ret = -1
-    c_attr = AX_VENC_CHN_ATTR_T()
     try:
+        c_attr = AX_VENC_CHN_ATTR_T()
         libaxcl_venc.AXCL_VENC_CreateChn.restype = AX_S32
         libaxcl_venc.AXCL_VENC_CreateChn.argtypes = [VENC_CHN, POINTER(AX_VENC_CHN_ATTR_T)]
 
@@ -191,12 +191,11 @@ def create_chn(chn: int, attr: dict) -> int:
         c_attr.dict2struct(attr)
 
         ret = libaxcl_venc.AXCL_VENC_CreateChn(c_chn, byref(c_attr))
-
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def create_chn_ex(attr: int) -> tuple[int, int]:
@@ -283,9 +282,9 @@ def create_chn_ex(attr: int) -> tuple[int, int]:
         chn, ret = axcl.venc.create_chn_ex(attr)
     """
     ret = -1
-    c_attr = AX_VENC_CHN_ATTR_T()
     c_chn = VENC_CHN(-1)
     try:
+        c_attr = AX_VENC_CHN_ATTR_T()
         libaxcl_venc.AXCL_VENC_CreateChnEx.restype = AX_S32
         libaxcl_venc.AXCL_VENC_CreateChnEx.argtypes = [POINTER(VENC_CHN), POINTER(AX_VENC_CHN_ATTR_T)]
 
@@ -297,10 +296,10 @@ def create_chn_ex(attr: int) -> tuple[int, int]:
         ret = libaxcl_venc.AXCL_VENC_CreateChnEx(byref(c_chn), byref(c_attr))
 
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return c_chn.value, ret
+    return c_chn.value, ret
 
 
 def destroy_chn(chn: int) -> int:
@@ -326,10 +325,10 @@ def destroy_chn(chn: int) -> int:
         c_chn = VENC_CHN(chn)
         ret = libaxcl_venc.AXCL_VENC_DestroyChn(c_chn)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def send_frame(chn: int, frame: dict, millisec: int) -> int:
@@ -368,8 +367,8 @@ def send_frame(chn: int, frame: dict, millisec: int) -> int:
         ret = axcl.venc.send_frame(chn, frame, -1)
     """
     ret = -1
-    c_frame = AX_VIDEO_FRAME_INFO_T()
     try:
+        c_frame = AX_VIDEO_FRAME_INFO_T()
         libaxcl_venc.AXCL_VENC_SendFrame.restype = AX_S32
         libaxcl_venc.AXCL_VENC_SendFrame.argtypes = [VENC_CHN, POINTER(AX_VIDEO_FRAME_INFO_T), AX_S32]
         c_chn = VENC_CHN(chn)
@@ -377,10 +376,10 @@ def send_frame(chn: int, frame: dict, millisec: int) -> int:
         c_frame.dict2struct(frame)
         ret = libaxcl_venc.AXCL_VENC_SendFrame(c_chn, byref(c_frame), c_millisec)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def send_frame_ex(chn: int, frame: dict, millisec: int) -> int:
@@ -402,8 +401,8 @@ def send_frame_ex(chn: int, frame: dict, millisec: int) -> int:
     :returns: **ret** (*int*) - 0 indicates success, otherwise failure
     """
     ret = -1
-    c_frame = AX_USER_FRAME_INFO_T()
     try:
+        c_frame = AX_USER_FRAME_INFO_T()
         libaxcl_venc.AXCL_VENC_SendFrameEx.restype = AX_S32
         libaxcl_venc.AXCL_VENC_SendFrameEx.argtypes = [VENC_CHN, POINTER(AX_USER_FRAME_INFO_T), AX_S32]
         c_chn = VENC_CHN(chn)
@@ -411,10 +410,10 @@ def send_frame_ex(chn: int, frame: dict, millisec: int) -> int:
         c_frame.dict2struct(frame)
         ret = libaxcl_venc.AXCL_VENC_SendFrameEx(c_chn, byref(c_frame), c_millisec)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def select_grp(grp_id: int, millisec: int) -> tuple[dict, int]:
@@ -438,9 +437,9 @@ def select_grp(grp_id: int, millisec: int) -> tuple[dict, int]:
         - **ret** (*int*) - 0 indicates success, otherwise failure.
     """
     ret = -1
-    c_strm_state = AX_CHN_STREAM_STATUS_T()
     strm_state = {}
     try:
+        c_strm_state = AX_CHN_STREAM_STATUS_T()
         libaxcl_venc.AXCL_VENC_SelectGrp.restype = AX_S32
         libaxcl_venc.AXCL_VENC_SelectGrp.argtypes = [VENC_CHN, POINTER(AX_CHN_STREAM_STATUS_T), AX_S32]
         c_grp_id = VENC_GRP(grp_id)
@@ -449,10 +448,10 @@ def select_grp(grp_id: int, millisec: int) -> tuple[dict, int]:
         if ret == AX_SUCCESS:
             strm_state = c_strm_state.struct2dict()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return strm_state, ret
+    return strm_state, ret
 
 
 def select_clear_grp(grp_id: int) -> int:
@@ -478,10 +477,10 @@ def select_clear_grp(grp_id: int) -> int:
         c_grp_id = VENC_GRP(grp_id)
         ret = libaxcl_venc.AXCL_VENC_SelectClearGrp(c_grp_id)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def select_grp_add_chn(grp_id: int, chn: int) -> int:
@@ -509,10 +508,10 @@ def select_grp_add_chn(grp_id: int, chn: int) -> int:
         c_chn = VENC_CHN(chn)
         ret = libaxcl_venc.AXCL_VENC_SelectGrpAddChn(c_grp_id, c_chn)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def select_grp_delete_chn(grp_id: int, chn: int) -> int:
@@ -540,10 +539,10 @@ def select_grp_delete_chn(grp_id: int, chn: int) -> int:
         c_chn = VENC_CHN(chn)
         ret = libaxcl_venc.AXCL_VENC_SelectGrpDeleteChn(c_grp_id, c_chn)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def select_grp_query(grp_id: int) -> tuple[dict, int]:
@@ -566,9 +565,9 @@ def select_grp_query(grp_id: int) -> tuple[dict, int]:
         - **ret** (*int*) - 0 indicates success, otherwise failure.
     """
     ret = -1
-    c_param = AX_VENC_SELECT_GRP_PARAM_T()
     param = {}
     try:
+        c_param = AX_VENC_SELECT_GRP_PARAM_T()
         libaxcl_venc.AXCL_VENC_SelectGrpQuery.restype = AX_S32
         libaxcl_venc.AXCL_VENC_SelectGrpQuery.argtypes = [VENC_GRP, POINTER(AX_VENC_SELECT_GRP_PARAM_T)]
         c_grp_id = VENC_GRP(grp_id)
@@ -576,10 +575,10 @@ def select_grp_query(grp_id: int) -> tuple[dict, int]:
         if ret == AX_SUCCESS:
             param = c_param.struct2dict()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return param, ret
+    return param, ret
 
 
 def get_stream(chn: int, millisec: int) -> tuple[dict, int]:
@@ -622,9 +621,9 @@ def get_stream(chn: int, millisec: int) -> tuple[dict, int]:
 
     """
     ret = -1
-    c_stream = AX_VENC_STREAM_T()
     stream = {}
     try:
+        c_stream = AX_VENC_STREAM_T()
         libaxcl_venc.AXCL_VENC_GetStream.restype = AX_S32
         libaxcl_venc.AXCL_VENC_GetStream.argtypes = [VENC_CHN, POINTER(AX_VENC_STREAM_T), AX_S32]
         c_chn = VENC_CHN(chn)
@@ -633,10 +632,10 @@ def get_stream(chn: int, millisec: int) -> tuple[dict, int]:
         if ret == AX_SUCCESS:
             ax_venc_stream_to_dict(c_stream, stream)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return stream, ret
+    return stream, ret
 
 
 def release_stream(chn: int, stream: dict) -> int:
@@ -657,18 +656,18 @@ def release_stream(chn: int, stream: dict) -> int:
     :returns: **ret** (*int*) - 0 indicates success, otherwise failure
     """
     ret = -1
-    c_stream = AX_VENC_STREAM_T()
     try:
+        c_stream = AX_VENC_STREAM_T()
         libaxcl_venc.AXCL_VENC_ReleaseStream.restype = AX_S32
         libaxcl_venc.AXCL_VENC_ReleaseStream.argtypes = [VENC_CHN, POINTER(AX_VENC_STREAM_T)]
         c_chn = VENC_CHN(chn)
         dict_to_ax_venc_stream(stream, c_stream)
         ret = libaxcl_venc.AXCL_VENC_ReleaseStream(c_chn, byref(c_stream))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def get_stream_buf_info(chn: int) -> tuple[dict, int]:
@@ -691,9 +690,9 @@ def get_stream_buf_info(chn: int) -> tuple[dict, int]:
         - **ret** (*int*) - 0 indicates success, otherwise failure.
     """
     ret = -1
-    c_stream_buf_info = AX_VENC_STREAM_BUF_INFO_T()
     stream_buf_info = {}
     try:
+        c_stream_buf_info = AX_VENC_STREAM_BUF_INFO_T()
         libaxcl_venc.AXCL_VENC_GetStreamBufInfo.restype = AX_S32
         libaxcl_venc.AXCL_VENC_GetStreamBufInfo.argtypes = [VENC_CHN, POINTER(AX_VENC_STREAM_BUF_INFO_T)]
         c_chn = VENC_CHN(chn)
@@ -701,10 +700,10 @@ def get_stream_buf_info(chn: int) -> tuple[dict, int]:
         if ret == AX_SUCCESS:
             stream_buf_info = c_stream_buf_info.struct2dict()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return stream_buf_info, ret
+    return stream_buf_info, ret
 
 
 def start_recv_frame(chn: int, recv_param: dict) -> int:
@@ -732,18 +731,18 @@ def start_recv_frame(chn: int, recv_param: dict) -> int:
         ret = axcl.venc.start_recv_frame(chn, recv_param)
     """
     ret = -1
-    c_recv_param = AX_VENC_RECV_PIC_PARAM_T()
     try:
+        c_recv_param = AX_VENC_RECV_PIC_PARAM_T()
         libaxcl_venc.AXCL_VENC_StartRecvFrame.restype = AX_S32
         libaxcl_venc.AXCL_VENC_StartRecvFrame.argtypes = [VENC_CHN, POINTER(AX_VENC_RECV_PIC_PARAM_T)]
         c_chn = VENC_CHN(chn)
         c_recv_param.dict2struct(recv_param)
         ret = libaxcl_venc.AXCL_VENC_StartRecvFrame(c_chn, byref(c_recv_param))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def stop_recv_frame(chn: int) -> int:
@@ -769,10 +768,10 @@ def stop_recv_frame(chn: int) -> int:
         c_chn = VENC_CHN(chn)
         ret = libaxcl_venc.AXCL_VENC_StopRecvFrame(c_chn)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def reset_chn(chn: int) -> int:
@@ -798,10 +797,10 @@ def reset_chn(chn: int) -> int:
         c_chn = VENC_CHN(chn)
         ret = libaxcl_venc.AXCL_VENC_ResetChn(c_chn)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def set_roi_attr(chn: int, roi_attr: dict) -> int:
@@ -822,18 +821,18 @@ def set_roi_attr(chn: int, roi_attr: dict) -> int:
     :returns: **ret** (*int*) - 0 indicates success, otherwise failure
     """
     ret = -1
-    c_roi_attr = AX_VENC_ROI_ATTR_T()
     try:
+        c_roi_attr = AX_VENC_ROI_ATTR_T()
         libaxcl_venc.AXCL_VENC_SetRoiAttr.restype = AX_S32
         libaxcl_venc.AXCL_VENC_SetRoiAttr.argtypes = [VENC_CHN, POINTER(AX_VENC_ROI_ATTR_T)]
         c_chn = VENC_CHN(chn)
         c_roi_attr.dict2struct(roi_attr)
         ret = libaxcl_venc.AXCL_VENC_SetRoiAttr(c_chn, byref(c_roi_attr))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def get_roi_attr(chn: int, index: int) -> tuple[dict, int]:
@@ -857,9 +856,9 @@ def get_roi_attr(chn: int, index: int) -> tuple[dict, int]:
         - **ret** (*int*) - 0 indicates success, otherwise failure.
     """
     ret = -1
-    c_roi_attr = AX_VENC_ROI_ATTR_T()
     roi_attr = {}
     try:
+        c_roi_attr = AX_VENC_ROI_ATTR_T()
         libaxcl_venc.AXCL_VENC_GetRoiAttr.restype = AX_S32
         libaxcl_venc.AXCL_VENC_GetRoiAttr.argtypes = [VENC_CHN, AX_U32, POINTER(AX_VENC_ROI_ATTR_T)]
         c_chn = VENC_CHN(chn)
@@ -868,10 +867,10 @@ def get_roi_attr(chn: int, index: int) -> tuple[dict, int]:
         if ret == AX_SUCCESS:
             roi_attr = c_roi_attr.struct2dict()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return roi_attr, ret
+    return roi_attr, ret
 
 
 def set_rc_param(chn: int, param: dict) -> int:
@@ -892,18 +891,18 @@ def set_rc_param(chn: int, param: dict) -> int:
     :returns: **ret** (*int*) - 0 indicates success, otherwise failure
     """
     ret = -1
-    c_param = AX_VENC_RC_PARAM_T()
     try:
+        c_param = AX_VENC_RC_PARAM_T()
         libaxcl_venc.AXCL_VENC_SetRcParam.restype = AX_S32
         libaxcl_venc.AXCL_VENC_SetRcParam.argtypes = [VENC_CHN, POINTER(AX_VENC_RC_PARAM_T)]
         c_chn = VENC_CHN(chn)
         c_param.dict2struct(param)
         ret = libaxcl_venc.AXCL_VENC_SetRcParam(c_chn, byref(c_param))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def get_rc_param(chn: int) -> tuple[dict, int]:
@@ -926,9 +925,9 @@ def get_rc_param(chn: int) -> tuple[dict, int]:
         - **ret** (*int*) - 0 indicates success, otherwise failure.
     """
     ret = -1
-    c_param = AX_VENC_RC_PARAM_T()
     param = {}
     try:
+        c_param = AX_VENC_RC_PARAM_T()
         libaxcl_venc.AXCL_VENC_GetRcParam.restype = AX_S32
         libaxcl_venc.AXCL_VENC_GetRcParam.argtypes = [VENC_CHN, POINTER(AX_VENC_RC_PARAM_T)]
         c_chn = VENC_CHN(chn)
@@ -936,10 +935,10 @@ def get_rc_param(chn: int) -> tuple[dict, int]:
         if ret == AX_SUCCESS:
             param = c_param.struct2dict()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return param, ret
+    return param, ret
 
 
 def set_mod_param(venc_type: int, param: dict) -> int:
@@ -960,18 +959,18 @@ def set_mod_param(venc_type: int, param: dict) -> int:
     :returns: **ret** (*int*) - 0 indicates success, otherwise failure
     """
     ret = -1
-    c_param = AX_VENC_MOD_PARAM_T()
     try:
+        c_param = AX_VENC_MOD_PARAM_T()
         libaxcl_venc.AXCL_VENC_SetModParam.restype = AX_S32
         libaxcl_venc.AXCL_VENC_SetModParam.argtypes = [AX_VENC_ENCODER_TYPE_E, POINTER(AX_VENC_MOD_PARAM_T)]
         c_venc_type = AX_VENC_ENCODER_TYPE_E(venc_type)
         c_param.dict2struct(param)
         ret = libaxcl_venc.AXCL_VENC_SetModParam(c_venc_type, byref(c_param))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def get_mod_param(venc_type: int) -> tuple[dict, int]:
@@ -994,9 +993,9 @@ def get_mod_param(venc_type: int) -> tuple[dict, int]:
         - **ret** (*int*) - 0 indicates success, otherwise failure.
     """
     ret = -1
-    c_param = AX_VENC_MOD_PARAM_T()
     param = {}
     try:
+        c_param = AX_VENC_MOD_PARAM_T()
         libaxcl_venc.AXCL_VENC_GetModParam.restype = AX_S32
         libaxcl_venc.AXCL_VENC_GetModParam.argtypes = [AX_VENC_ENCODER_TYPE_E, POINTER(AX_VENC_MOD_PARAM_T)]
         c_venc_type = AX_VENC_ENCODER_TYPE_E(venc_type)
@@ -1004,10 +1003,10 @@ def get_mod_param(venc_type: int) -> tuple[dict, int]:
         if ret == AX_SUCCESS:
             param = c_param.struct2dict()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return param, ret
+    return param, ret
 
 
 def set_vui_param(chn: int, param: dict) -> int:
@@ -1028,18 +1027,18 @@ def set_vui_param(chn: int, param: dict) -> int:
     :returns: **ret** (*int*) - 0 indicates success, otherwise failure
     """
     ret = -1
-    c_param = AX_VENC_VUI_PARAM_T()
     try:
+        c_param = AX_VENC_VUI_PARAM_T()
         libaxcl_venc.AXCL_VENC_SetVuiParam.restype = AX_S32
         libaxcl_venc.AXCL_VENC_SetVuiParam.argtypes = [VENC_CHN, POINTER(AX_VENC_VUI_PARAM_T)]
         c_chn = VENC_CHN(chn)
         c_param.dict2struct(param)
         ret = libaxcl_venc.AXCL_VENC_SetVuiParam(c_chn, byref(c_param))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def get_vui_param(chn: int) -> tuple[dict, int]:
@@ -1062,9 +1061,9 @@ def get_vui_param(chn: int) -> tuple[dict, int]:
         - **ret** (*int*) - 0 indicates success, otherwise failure.
     """
     ret = -1
-    c_param = AX_VENC_VUI_PARAM_T()
     param = {}
     try:
+        c_param = AX_VENC_VUI_PARAM_T()
         libaxcl_venc.AXCL_VENC_GetVuiParam.restype = AX_S32
         libaxcl_venc.AXCL_VENC_GetVuiParam.argtypes = [VENC_CHN, POINTER(AX_VENC_VUI_PARAM_T)]
         c_chn = VENC_CHN(chn)
@@ -1072,10 +1071,10 @@ def get_vui_param(chn: int) -> tuple[dict, int]:
         if ret == AX_SUCCESS:
             param = c_param.struct2dict()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return param, ret
+    return param, ret
 
 
 def set_chn_attr(chn: int, attr: dict) -> int:
@@ -1101,8 +1100,8 @@ def set_chn_attr(chn: int, attr: dict) -> int:
 
     """
     ret = -1
-    c_attr = AX_VENC_CHN_ATTR_T()
     try:
+        c_attr = AX_VENC_CHN_ATTR_T()
         libaxcl_venc.AXCL_VENC_SetChnAttr.restype = AX_S32
         libaxcl_venc.AXCL_VENC_SetChnAttr.argtypes = [VENC_CHN, POINTER(AX_VENC_CHN_ATTR_T)]
         c_chn = VENC_CHN(chn)
@@ -1112,10 +1111,10 @@ def set_chn_attr(chn: int, attr: dict) -> int:
         c_attr.dict2struct(attr)
         ret = libaxcl_venc.AXCL_VENC_SetChnAttr(c_chn, byref(c_attr))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def get_chn_attr(chn: int) -> tuple[dict, int]:
@@ -1138,9 +1137,9 @@ def get_chn_attr(chn: int) -> tuple[dict, int]:
         - **ret** (*int*) - 0 indicates success, otherwise failure.
     """
     ret = -1
-    c_attr = AX_VENC_CHN_ATTR_T()
     attr = {}
     try:
+        c_attr = AX_VENC_CHN_ATTR_T()
         libaxcl_venc.AXCL_VENC_GetChnAttr.restype = AX_S32
         libaxcl_venc.AXCL_VENC_GetChnAttr.argtypes = [VENC_CHN, POINTER(AX_VENC_CHN_ATTR_T)]
         c_chn = VENC_CHN(chn)
@@ -1148,10 +1147,10 @@ def get_chn_attr(chn: int) -> tuple[dict, int]:
         if ret == AX_SUCCESS:
             attr = c_attr.struct2dict()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return attr, ret
+    return attr, ret
 
 
 def set_rate_jam_strategy(chn: int, param: dict) -> int:
@@ -1172,18 +1171,18 @@ def set_rate_jam_strategy(chn: int, param: dict) -> int:
     :returns: **ret** (*int*) - 0 indicates success, otherwise failure
     """
     ret = -1
-    c_param = AX_VENC_RATE_JAM_CFG_T()
     try:
+        c_param = AX_VENC_RATE_JAM_CFG_T()
         libaxcl_venc.AXCL_VENC_SetRateJamStrategy.restype = AX_S32
         libaxcl_venc.AXCL_VENC_SetRateJamStrategy.argtypes = [VENC_CHN, POINTER(AX_VENC_RATE_JAM_CFG_T)]
         c_chn = VENC_CHN(chn)
         c_param.dict2struct(param)
         ret = libaxcl_venc.AXCL_VENC_SetRateJamStrategy(c_chn, byref(c_param))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def get_rate_jam_strategy(chn: int) -> tuple[dict, int]:
@@ -1206,9 +1205,9 @@ def get_rate_jam_strategy(chn: int) -> tuple[dict, int]:
         - **ret** (*int*) - 0 indicates success, otherwise failure.
     """
     ret = -1
-    c_param = AX_VENC_RATE_JAM_CFG_T()
     param = {}
     try:
+        c_param = AX_VENC_RATE_JAM_CFG_T()
         libaxcl_venc.AXCL_VENC_GetRateJamStrategy.restype = AX_S32
         libaxcl_venc.AXCL_VENC_GetRateJamStrategy.argtypes = [VENC_CHN, POINTER(AX_VENC_RATE_JAM_CFG_T)]
         c_chn = VENC_CHN(chn)
@@ -1216,10 +1215,10 @@ def get_rate_jam_strategy(chn: int) -> tuple[dict, int]:
         if ret == AX_SUCCESS:
             param = c_param.struct2dict()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return param, ret
+    return param, ret
 
 
 def set_supper_frame_strategy(chn: int, param: dict) -> int:
@@ -1240,18 +1239,18 @@ def set_supper_frame_strategy(chn: int, param: dict) -> int:
     :returns: **ret** (*int*) - 0 indicates success, otherwise failure
     """
     ret = -1
-    c_param = AX_VENC_SUPERFRAME_CFG_T()
     try:
+        c_param = AX_VENC_SUPERFRAME_CFG_T()
         libaxcl_venc.AXCL_VENC_SetSuperFrameStrategy.restype = AX_S32
         libaxcl_venc.AXCL_VENC_SetSuperFrameStrategy.argtypes = [VENC_CHN, POINTER(AX_VENC_SUPERFRAME_CFG_T)]
         c_chn = VENC_CHN(chn)
         c_param.dict2struct(param)
         ret = libaxcl_venc.AXCL_VENC_SetSuperFrameStrategy(c_chn, byref(c_param))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def get_supper_frame_strategy(chn: int) -> tuple[dict, int]:
@@ -1274,9 +1273,9 @@ def get_supper_frame_strategy(chn: int) -> tuple[dict, int]:
         - **ret** (*int*) - 0 indicates success, otherwise failure.
     """
     ret = -1
-    c_param = AX_VENC_SUPERFRAME_CFG_T()
     param = {}
     try:
+        c_param = AX_VENC_SUPERFRAME_CFG_T()
         libaxcl_venc.AXCL_VENC_GetSuperFrameStrategy.restype = AX_S32
         libaxcl_venc.AXCL_VENC_GetSuperFrameStrategy.argtypes = [VENC_CHN, POINTER(AX_VENC_SUPERFRAME_CFG_T)]
         c_chn = VENC_CHN(chn)
@@ -1284,10 +1283,10 @@ def get_supper_frame_strategy(chn: int) -> tuple[dict, int]:
         if ret == AX_SUCCESS:
             param = c_param.struct2dict()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return param, ret
+    return param, ret
 
 
 def set_intra_refresh(chn: int, param: dict) -> int:
@@ -1308,18 +1307,18 @@ def set_intra_refresh(chn: int, param: dict) -> int:
     :returns: **ret** (*int*) - 0 indicates success, otherwise failure
     """
     ret = -1
-    c_param = AX_VENC_INTRA_REFRESH_T()
     try:
+        c_param = AX_VENC_INTRA_REFRESH_T()
         libaxcl_venc.AXCL_VENC_SetIntraRefresh.restype = AX_S32
         libaxcl_venc.AXCL_VENC_SetIntraRefresh.argtypes = [VENC_CHN, POINTER(AX_VENC_INTRA_REFRESH_T)]
         c_chn = VENC_CHN(chn)
         c_param.dict2struct(param)
         ret = libaxcl_venc.AXCL_VENC_SetIntraRefresh(c_chn, byref(c_param))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def get_intra_refresh(chn: int) -> tuple[dict, int]:
@@ -1342,9 +1341,9 @@ def get_intra_refresh(chn: int) -> tuple[dict, int]:
         - **ret** (*int*) - 0 indicates success, otherwise failure.
     """
     ret = -1
-    c_param = AX_VENC_INTRA_REFRESH_T()
     param = {}
     try:
+        c_param = AX_VENC_INTRA_REFRESH_T()
         libaxcl_venc.AXCL_VENC_GetIntraRefresh.restype = AX_S32
         libaxcl_venc.AXCL_VENC_GetIntraRefresh.argtypes = [VENC_CHN, POINTER(AX_VENC_INTRA_REFRESH_T)]
         c_chn = VENC_CHN(chn)
@@ -1352,10 +1351,10 @@ def get_intra_refresh(chn: int) -> tuple[dict, int]:
         if ret == AX_SUCCESS:
             param = c_param.struct2dict()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return param, ret
+    return param, ret
 
 
 def set_usr_data(chn: int, param: dict) -> int:
@@ -1376,18 +1375,18 @@ def set_usr_data(chn: int, param: dict) -> int:
     :returns: **ret** (*int*) - 0 indicates success, otherwise failure
     """
     ret = -1
-    c_param = AX_VENC_USR_DATA_T()
     try:
+        c_param = AX_VENC_USR_DATA_T()
         libaxcl_venc.AXCL_VENC_SetUsrData.restype = AX_S32
         libaxcl_venc.AXCL_VENC_SetUsrData.argtypes = [VENC_CHN, POINTER(AX_VENC_USR_DATA_T)]
         c_chn = VENC_CHN(chn)
         c_param.dict2struct(param)
         ret = libaxcl_venc.AXCL_VENC_SetUsrData(c_chn, byref(c_param))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def get_usr_data(chn: int, usr_data: dict) -> tuple[dict, int]:
@@ -1411,9 +1410,9 @@ def get_usr_data(chn: int, usr_data: dict) -> tuple[dict, int]:
         - **ret** (*int*) - 0 indicates success, otherwise failure
     """
     ret = -1
-    c_param = AX_VENC_USR_DATA_T()
     output = {}
     try:
+        c_param = AX_VENC_USR_DATA_T()
         libaxcl_venc.AXCL_VENC_GetUsrData.restype = AX_S32
         libaxcl_venc.AXCL_VENC_GetUsrData.argtypes = [VENC_CHN, POINTER(AX_VENC_USR_DATA_T)]
         c_chn = VENC_CHN(chn)
@@ -1422,10 +1421,10 @@ def get_usr_data(chn: int, usr_data: dict) -> tuple[dict, int]:
         if ret == AX_SUCCESS:
             output = c_param.struct2dict()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return output, ret
+    return output, ret
 
 
 def set_slice_split(chn: int, param: dict) -> int:
@@ -1446,18 +1445,18 @@ def set_slice_split(chn: int, param: dict) -> int:
     :returns: **ret** (*int*) - 0 indicates success, otherwise failure
     """
     ret = -1
-    c_param = AX_VENC_SLICE_SPLIT_T()
     try:
+        c_param = AX_VENC_SLICE_SPLIT_T()
         libaxcl_venc.AXCL_VENC_SetSliceSplit.restype = AX_S32
         libaxcl_venc.AXCL_VENC_SetSliceSplit.argtypes = [VENC_CHN, POINTER(AX_VENC_SLICE_SPLIT_T)]
         c_chn = VENC_CHN(chn)
         c_param.dict2struct(param)
         ret = libaxcl_venc.AXCL_VENC_SetSliceSplit(c_chn, byref(c_param))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def get_slice_split(chn: int) -> tuple[dict, int]:
@@ -1480,9 +1479,9 @@ def get_slice_split(chn: int) -> tuple[dict, int]:
         - **ret** (*int*) - 0 indicates success, otherwise failure.
     """
     ret = -1
-    c_param = AX_VENC_SLICE_SPLIT_T()
     param = {}
     try:
+        c_param = AX_VENC_SLICE_SPLIT_T()
         libaxcl_venc.AXCL_VENC_GetSliceSplit.restype = AX_S32
         libaxcl_venc.AXCL_VENC_GetSliceSplit.argtypes = [VENC_CHN, POINTER(AX_VENC_SLICE_SPLIT_T)]
         c_chn = VENC_CHN(chn)
@@ -1490,10 +1489,10 @@ def get_slice_split(chn: int) -> tuple[dict, int]:
         if ret == AX_SUCCESS:
             param = c_param.struct2dict()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return param, ret
+    return param, ret
 
 
 def request_idr(chn: int, instant: int) -> int:
@@ -1521,10 +1520,10 @@ def request_idr(chn: int, instant: int) -> int:
         c_instant = AX_BOOL(1 if instant else 0)
         ret = libaxcl_venc.AXCL_VENC_RequestIDR(c_chn, c_instant)
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def query_status(chn: int) -> tuple[dict, int]:
@@ -1547,9 +1546,9 @@ def query_status(chn: int) -> tuple[dict, int]:
         - **ret** (*int*) - 0 indicates success, otherwise failure
     """
     ret = -1
-    c_status = AX_VENC_CHN_STATUS_T()
     status = {}
     try:
+        c_status = AX_VENC_CHN_STATUS_T()
         libaxcl_venc.AXCL_VENC_QueryStatus.restype = AX_S32
         libaxcl_venc.AXCL_VENC_QueryStatus.argtypes = [VENC_CHN, POINTER(AX_VENC_CHN_STATUS_T)]
         c_chn = VENC_CHN(chn)
@@ -1557,10 +1556,10 @@ def query_status(chn: int) -> tuple[dict, int]:
         if ret == AX_SUCCESS:
             status = c_status.struct2dict()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return status, ret
+    return status, ret
 
 
 def set_jpeg_param(chn: int, param: dict) -> int:
@@ -1581,18 +1580,18 @@ def set_jpeg_param(chn: int, param: dict) -> int:
     :returns: **ret** (*int*) - 0 indicates success, otherwise failure
     """
     ret = -1
-    c_param = AX_VENC_JPEG_PARAM_T()
     try:
+        c_param = AX_VENC_JPEG_PARAM_T()
         libaxcl_venc.AXCL_VENC_SetJpegParam.restype = AX_S32
         libaxcl_venc.AXCL_VENC_SetJpegParam.argtypes = [VENC_CHN, POINTER(AX_VENC_JPEG_PARAM_T)]
         c_chn = VENC_CHN(chn)
         c_param.dict2struct(param)
         ret = libaxcl_venc.AXCL_VENC_SetJpegParam(c_chn, byref(c_param))
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return ret
+    return ret
 
 
 def get_jpeg_param(chn: int) -> tuple[dict, int]:
@@ -1615,9 +1614,9 @@ def get_jpeg_param(chn: int) -> tuple[dict, int]:
         - **ret** (*int*) - 0 indicates success, otherwise failure
     """
     ret = -1
-    c_param = AX_VENC_JPEG_PARAM_T()
     param = {}
     try:
+        c_param = AX_VENC_JPEG_PARAM_T()
         libaxcl_venc.AXCL_VENC_GetJpegParam.restype = AX_S32
         libaxcl_venc.AXCL_VENC_GetJpegParam.argtypes = [VENC_CHN, POINTER(AX_VENC_JPEG_PARAM_T)]
         c_chn = VENC_CHN(chn)
@@ -1625,10 +1624,10 @@ def get_jpeg_param(chn: int) -> tuple[dict, int]:
         if ret == AX_SUCCESS:
             param = c_param.struct2dict()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return param, ret
+    return param, ret
 
 
 def jpeg_encode_one_frame(param: dict) -> tuple[dict, int]:
@@ -1651,9 +1650,9 @@ def jpeg_encode_one_frame(param: dict) -> tuple[dict, int]:
         - **ret** (*int*) - 0 indicates success, otherwise failure
     """
     ret = -1
-    c_param = AX_JPEG_ENCODE_ONCE_PARAMS_T()
     output = {}
     try:
+        c_param = AX_JPEG_ENCODE_ONCE_PARAMS_T()
         libaxcl_venc.AXCL_VENC_JpegEncodeOneFrame.restype = AX_S32
         libaxcl_venc.AXCL_VENC_JpegEncodeOneFrame.argtypes = [POINTER(AX_JPEG_ENCODE_ONCE_PARAMS_T)]
         c_param.dict2struct(param)
@@ -1661,7 +1660,7 @@ def jpeg_encode_one_frame(param: dict) -> tuple[dict, int]:
         if ret == AX_SUCCESS:
             output = c_param.struct2dict()
     except:
+        ret = -1
         log_error(sys.exc_info())
         log_error(traceback.format_exc())
-    finally:
-        return output, ret
+    return output, ret
